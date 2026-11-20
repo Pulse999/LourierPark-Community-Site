@@ -1760,3 +1760,991 @@ button {
     transform: none;
   }
 }
+
+/* =========================================================
+   LOURIERPARK — INTERIOR PAGE SYSTEM
+   ========================================================= */
+
+.interior-page {
+  background: var(--warm, #f7f8f5);
+  color: var(--navy, #092b40);
+}
+
+.interior-hero {
+  min-height: 590px;
+  height: min(680px, 78vh);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background: var(--navy, #092b40);
+}
+
+.interior-hero-image,
+.interior-hero-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.interior-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.interior-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4, 25, 36, 0.88) 0%,
+      rgba(4, 25, 36, 0.68) 42%,
+      rgba(4, 25, 36, 0.18) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(4, 25, 36, 0.35),
+      transparent 55%
+    );
+}
+
+.interior-hero-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.interior-hero-content .eyebrow {
+  color: #f0b64e;
+  margin-bottom: 22px;
+  display: inline-block;
+}
+
+.interior-hero-content h1 {
+  max-width: 850px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3.6rem, 7vw, 6.6rem);
+  font-weight: 500;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  margin: 0 0 26px;
+}
+
+.interior-hero-content h1 em {
+  color: #efb64e;
+  font-weight: 500;
+}
+
+.interior-hero-content > p {
+  max-width: 510px;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.84);
+  margin: 0 0 30px;
+}
+
+.interior-hero-index {
+  position: absolute;
+  z-index: 2;
+  bottom: 27px;
+  left: max(28px, calc((100% - 1240px) / 2));
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.interior-heading {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.7rem, 4.5vw, 4.5rem);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  margin: 14px 0 0;
+}
+
+.interior-heading em {
+  display: block;
+  color: var(--green, #277a43);
+  font-weight: 500;
+}
+
+.interior-copy {
+  max-width: 590px;
+  color: #61717a;
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+
+.interior-copy p {
+  margin: 0 0 18px;
+}
+
+.interior-copy .lead {
+  color: var(--navy, #092b40);
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.placeholder-note {
+  border-left: 3px solid var(--gold, #eca02c);
+  background: #eef1eb;
+  color: #61717a;
+  padding: 17px 20px;
+  font-size: 0.86rem;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+
+.placeholder-note ul {
+  padding-left: 18px;
+  margin: 9px 0 0;
+}
+
+.about-intro-grid,
+.neighbourhood-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  align-items: start;
+}
+
+.about-story-section {
+  background: #e9efea;
+  padding: 100px 0;
+}
+
+.about-story-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 90px;
+  align-items: center;
+}
+
+.about-story-image {
+  min-height: 510px;
+  position: relative;
+}
+
+.about-story-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-story-image > span {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  padding: 12px 16px;
+  color: white;
+  background: var(--navy, #092b40);
+  font-size: 0.59rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.about-story-copy > p {
+  color: #61717a;
+  line-height: 1.85;
+  font-size: 0.94rem;
+}
+
+.about-story-copy .interior-heading {
+  margin-bottom: 28px;
+}
+
+.centered-section-heading {
+  max-width: 700px;
+  text-align: center;
+  margin: 0 auto 52px;
+}
+
+.centered-section-heading .interior-heading em {
+  display: inline;
+}
+
+.centered-section-heading > p {
+  max-width: 540px;
+  margin: 20px auto 0;
+  color: #718087;
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.value-card {
+  padding: 34px;
+  background: white;
+  border: 1px solid #e6eae5;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(9, 43, 64, 0.08);
+}
+
+.value-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--green, #277a43);
+  background: #e9efea;
+  margin-bottom: 24px;
+}
+
+.value-card h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.value-card p {
+  color: #718087;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.interior-cta {
+  padding: 75px 0;
+  background: var(--navy, #092b40);
+  color: white;
+}
+
+.interior-cta-content,
+.gallery-community-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.interior-cta .eyebrow,
+.gallery-community-cta .eyebrow {
+  color: #efb64e;
+}
+
+.interior-cta h2,
+.gallery-community-cta h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 500;
+  line-height: 0.98;
+  margin: 15px 0 0;
+}
+
+.interior-cta h2 em,
+.gallery-community-cta h2 em {
+  color: #efb64e;
+  font-weight: 500;
+}
+
+/* Neighbourhood page */
+
+.neighbourhood-listing-section {
+  background: #eef1eb;
+}
+
+.section-topline {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 42px;
+}
+
+.listing-count {
+  color: #89969a;
+  font-size: 0.59rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  padding-bottom: 8px;
+}
+
+.neighbourhood-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.neighbourhood-card {
+  background: white;
+  min-width: 0;
+}
+
+.neighbourhood-card-image {
+  height: 245px;
+  position: relative;
+  overflow: hidden;
+  background: #dce3dc;
+}
+
+.neighbourhood-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.neighbourhood-card:hover img {
+  transform: scale(1.045);
+}
+
+.neighbourhood-card-image > span {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  color: white;
+  background: var(--navy, #092b40);
+  padding: 8px 11px;
+  font-size: 0.65rem;
+}
+
+.neighbourhood-card-copy {
+  padding: 27px;
+}
+
+.neighbourhood-card-copy .eyebrow {
+  color: var(--green, #277a43);
+  font-size: 0.57rem;
+}
+
+.neighbourhood-card-copy h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.85rem;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.neighbourhood-card-copy p {
+  min-height: 76px;
+  color: #718087;
+  font-size: 0.85rem;
+  line-height: 1.75;
+  margin: 0 0 20px;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.neighbourhood-feature {
+  min-height: 440px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--navy, #092b40);
+  color: white;
+}
+
+.neighbourhood-feature-image {
+  min-height: 440px;
+}
+
+.neighbourhood-feature-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.neighbourhood-feature-copy {
+  max-width: 650px;
+  padding: 75px clamp(35px, 7vw, 100px);
+  align-self: center;
+}
+
+.neighbourhood-feature-copy .eyebrow {
+  color: #efb64e;
+}
+
+.neighbourhood-feature-copy h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+  font-weight: 500;
+  line-height: 0.98;
+  margin: 18px 0;
+}
+
+.neighbourhood-feature-copy p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  line-height: 1.85;
+  margin-bottom: 28px;
+}
+
+/* Community map page */
+
+.community-map-page {
+  background: #f7f8f5;
+}
+
+.map-search {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  background: white;
+  border: 1px solid #e0e6e0;
+  color: #728087;
+  margin-bottom: 20px;
+}
+
+.map-search input {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--navy, #092b40);
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.map-category-filters,
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 30px;
+}
+
+.map-category-filters button,
+.gallery-filters button {
+  border: 1px solid #dce3dc;
+  background: transparent;
+  color: #65757c;
+  padding: 11px 16px;
+  font: inherit;
+  font-size: 0.77rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.map-category-filters button.active,
+.gallery-filters button.active {
+  background: var(--navy, #092b40);
+  color: white;
+  border-color: var(--navy, #092b40);
+}
+
+.map-category-filters button:hover,
+.gallery-filters button:hover {
+  border-color: var(--green, #277a43);
+}
+
+.map-directory-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.map-directory-list {
+  background: white;
+  border: 1px solid #e4e9e4;
+}
+
+.map-results-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 19px 22px;
+  border-bottom: 1px solid #e8ece8;
+  color: #829096;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.map-location-card {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 17px;
+  padding: 17px;
+  border-bottom: 1px solid #edf0ed;
+}
+
+.map-location-card:last-child {
+  border-bottom: 0;
+}
+
+.map-location-card > img {
+  width: 105px;
+  height: 112px;
+  object-fit: cover;
+}
+
+.map-location-card .eyebrow {
+  font-size: 0.55rem;
+  color: var(--green, #277a43);
+}
+
+.map-location-card h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.45rem;
+  margin: 5px 0;
+}
+
+.map-location-card p {
+  color: #718087;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  margin: 0 0 8px;
+}
+
+.map-location-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #9a7a38;
+  font-size: 0.65rem;
+}
+
+.map-empty {
+  padding: 30px;
+  color: #718087;
+  font-size: 0.88rem;
+}
+
+.map-placeholder {
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  background: #e5ebe4;
+  border: 1px solid #d8e0d8;
+}
+
+.map-placeholder-art {
+  position: relative;
+  flex: 1;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #e5ebe4;
+  background-image:
+    linear-gradient(28deg, transparent 47%, rgba(255,255,255,.8) 48%, rgba(255,255,255,.8) 50%, transparent 51%),
+    linear-gradient(115deg, transparent 44%, rgba(255,255,255,.85) 45%, rgba(255,255,255,.85) 47%, transparent 48%),
+    linear-gradient(70deg, transparent 68%, rgba(255,255,255,.75) 69%, rgba(255,255,255,.75) 71%, transparent 72%);
+  background-size: 230px 190px, 280px 230px, 310px 240px;
+}
+
+.map-placeholder-pin {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  color: white;
+  background: var(--green, #277a43);
+  box-shadow: 0 10px 25px rgba(9, 43, 64, 0.18);
+}
+
+.map-placeholder-pin svg {
+  transform: rotate(45deg);
+}
+
+.map-placeholder-label {
+  margin-top: 23px;
+  color: var(--navy, #092b40);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 600;
+}
+
+.map-placeholder-subtitle {
+  margin-top: 5px;
+  color: #829096;
+  font-size: 0.57rem;
+  letter-spacing: 0.17em;
+  font-weight: 700;
+}
+
+.map-placeholder-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px;
+  background: white;
+}
+
+.map-placeholder-footer strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.45rem;
+}
+
+.map-placeholder-footer p {
+  color: #718087;
+  font-size: 0.77rem;
+  line-height: 1.6;
+  margin: 5px 0 0;
+}
+
+.map-placeholder-footer a {
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: var(--green, #277a43);
+}
+
+.map-disclaimer {
+  color: #89969a;
+  font-size: 0.72rem;
+  line-height: 1.7;
+  margin-top: 18px;
+}
+
+/* Gallery page */
+
+.gallery-page-section {
+  background: #f7f8f5;
+}
+
+.gallery-intro {
+  max-width: 570px;
+  color: #718087;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  margin-top: 19px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 260px;
+  gap: 15px;
+}
+
+.gallery-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  background: #dfe6df;
+}
+
+.gallery-photo:nth-child(5n + 1) {
+  grid-row: span 1;
+}
+
+.gallery-photo:nth-child(5n + 2) {
+  grid-row: span 1;
+}
+
+.gallery-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.55s ease;
+}
+
+.gallery-photo:hover img {
+  transform: scale(1.06);
+}
+
+.gallery-photo-overlay {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 38px 20px 18px;
+  color: white;
+  background: linear-gradient(0deg, rgba(4, 25, 36, 0.85), transparent);
+  opacity: 0.95;
+}
+
+.gallery-photo-overlay > span {
+  color: #efb64e;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.gallery-photo-overlay strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.gallery-community-cta {
+  padding: 80px 0;
+  color: white;
+  background: var(--navy, #092b40);
+}
+
+.gallery-community-cta-inner > div {
+  max-width: 620px;
+}
+
+.gallery-community-cta p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
+  line-height: 1.8;
+  max-width: 530px;
+  margin-top: 20px;
+}
+
+/* Gallery lightbox */
+
+.gallery-lightbox {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 55px 35px;
+  background: rgba(3, 17, 25, 0.96);
+}
+
+.gallery-lightbox-content {
+  width: min(100%, 1050px);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery-lightbox-content img {
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+}
+
+.gallery-lightbox-content > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-top: 17px;
+  color: white;
+}
+
+.gallery-lightbox-content > div span {
+  color: #efb64e;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.gallery-lightbox-content > div strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.3rem;
+}
+
+.gallery-lightbox-content > div small {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gallery-lightbox-close,
+.gallery-lightbox-arrow {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: white;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08);
+  cursor: pointer;
+}
+
+.gallery-lightbox-close {
+  top: 22px;
+  right: 25px;
+  width: 45px;
+  height: 45px;
+}
+
+.gallery-lightbox-arrow {
+  top: 50%;
+  width: 46px;
+  height: 46px;
+  transform: translateY(-50%);
+}
+
+.gallery-lightbox-arrow.previous {
+  left: 22px;
+}
+
+.gallery-lightbox-arrow.next {
+  right: 22px;
+}
+
+/* Responsive layouts */
+
+@media (max-width: 900px) {
+  .about-intro-grid,
+  .about-story-grid,
+  .neighbourhood-intro {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .about-story-image {
+    min-height: 400px;
+  }
+
+  .neighbourhood-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .map-directory-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-placeholder {
+    min-height: 400px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 230px;
+  }
+}
+
+@media (max-width: 600px) {
+  .interior-hero {
+    min-height: 570px;
+    height: 72vh;
+  }
+
+  .interior-hero-content h1 {
+    font-size: clamp(3.2rem, 14vw, 4.6rem);
+  }
+
+  .interior-hero-content > p {
+    max-width: 95%;
+  }
+
+  .interior-hero-index {
+    left: 22px;
+    bottom: 20px;
+  }
+
+  .section-topline {
+    align-items: start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .about-story-section {
+    padding: 65px 0;
+  }
+
+  .about-story-image {
+    min-height: 320px;
+  }
+
+  .value-grid,
+  .neighbourhood-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .neighbourhood-card-image {
+    height: 230px;
+  }
+
+  .neighbourhood-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .neighbourhood-feature-image {
+    min-height: 280px;
+  }
+
+  .neighbourhood-feature-copy {
+    padding: 55px 25px;
+  }
+
+  .interior-cta-content,
+  .gallery-community-cta-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .map-location-card {
+    grid-template-columns: 85px 1fr;
+    gap: 13px;
+    padding: 13px;
+  }
+
+  .map-location-card > img {
+    width: 85px;
+    height: 100px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 180px;
+    gap: 9px;
+  }
+
+  .gallery-photo-overlay {
+    padding: 30px 11px 12px;
+  }
+
+  .gallery-photo-overlay strong {
+    font-size: 1.1rem;
+  }
+
+  .gallery-lightbox {
+    padding: 60px 12px;
+  }
+
+  .gallery-lightbox-arrow {
+    top: auto;
+    bottom: 15px;
+    transform: none;
+  }
+
+  .gallery-lightbox-arrow.previous {
+    left: 20px;
+  }
+
+  .gallery-lightbox-arrow.next {
+    right: 20px;
+  }
+
+  .gallery-lightbox-content img {
+    max-height: calc(100vh - 190px);
+  }
+
+  .gallery-lightbox-content > div {
+    flex-wrap: wrap;
+  }
+}

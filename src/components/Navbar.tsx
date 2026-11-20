@@ -5,27 +5,27 @@ import { ChevronDown, Menu, X, ArrowUpRight } from "lucide-react";
 
 const menus = {
   Discover: [
-    {
-      title: "About LourierPark",
-      desc: "Get to know our neighbourhood",
-      href: "/about",
-    },
-    {
-      title: "Our neighbourhood",
-      desc: "The places and character that shape us",
-      href: "/about",
-    },
-    {
-      title: "Community map",
-      desc: "Explore local places on the map",
-      href: "/explore",
-    },
-    {
-      title: "Gallery",
-      desc: "Moments from community life",
-      href: "/community",
-    },
-  ],
+  {
+    title: "About LourierPark",
+    desc: "Get to know our neighbourhood",
+    href: "/about",
+  },
+  {
+    title: "Our neighbourhood",
+    desc: "The places and character that shape us",
+    href: "/neighbourhood",
+  },
+  {
+    title: "Community map",
+    desc: "Explore local places on the map",
+    href: "/map",
+  },
+  {
+    title: "Gallery",
+    desc: "Moments from community life",
+    href: "/gallery",
+  },
+],
   Explore: [
     {
       title: "Local businesses",

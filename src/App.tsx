@@ -1,23 +1,27 @@
 import { Route, Routes } from "react-router-dom";
 import { SiteLayout } from "./components/SiteLayout";
+
 import HomePage from "../pages/HomePage";
 import SimplePage from "../pages/SimplePage";
+
+import AboutPage from "../pages/AboutPage";
+import NeighbourhoodPage from "../pages/NeighbourhoodPage";
+import CommunityMapPage from "../pages/CommunityMapPage";
+import GalleryPage from "../pages/GalleryPage";
 
 export default function App() {
   return (
     <Routes>
       <Route element={<SiteLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/about"
-          element={
-            <SimplePage
-              eyebrow="Discover"
-              title="A neighbourhood with a story."
-              body="LourierPark is more than a place on the map. This is where we'll share the neighbourhood's identity, character and community story using information verified with the people who call it home."
-            />
-          }
-        />
+
+        {/* Discover */}
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/neighbourhood" element={<NeighbourhoodPage />} />
+        <Route path="/map" element={<CommunityMapPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+
+        {/* Existing pages — kept intact */}
         <Route
           path="/explore"
           element={
@@ -28,6 +32,7 @@ export default function App() {
             />
           }
         />
+
         <Route
           path="/community"
           element={
@@ -38,6 +43,7 @@ export default function App() {
             />
           }
         />
+
         <Route
           path="/contact"
           element={
