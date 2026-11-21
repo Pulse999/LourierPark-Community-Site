@@ -51,6 +51,8 @@ export default function HomePage() {
           (src) => src !== current.current
         );
 
+        if (availableImages.length === 0) return current;
+
         const nextImage =
           availableImages[
             Math.floor(Math.random() * availableImages.length)
@@ -81,12 +83,58 @@ export default function HomePage() {
     return () => window.clearTimeout(timeout);
   }, [heroSlide.transition, heroSlide.previous]);
 
+  // Scroll-triggered reveal animations.
+  useEffect(() => {
+    const elements =
+      document.querySelectorAll<HTMLElement>("[data-reveal]");
+
+    document.documentElement.classList.add("has-scroll-reveal");
+
+    // Fallback for browsers without IntersectionObserver.
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => {
+        element.classList.add("is-visible");
+      });
+
+      return () => {
+        document.documentElement.classList.remove("has-scroll-reveal");
+      };
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const element = entry.target as HTMLElement;
+
+            element.classList.add("is-visible");
+
+            // Each element animates only once.
+            currentObserver.unobserve(element);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -65px 0px",
+      }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove("has-scroll-reveal");
+    };
+  }, []);
+
   return (
     <>
-      {/* HERO SECTION */}
-      <section className="hero">
+      {/* =====================================================
+          HERO SECTION
+      ===================================================== */}
 
-        {/* Previous image during transition */}
+      <section className="hero">
         {heroSlide.previous && (
           <div
             className="hero-image hero-image--exit"
@@ -97,7 +145,6 @@ export default function HomePage() {
           />
         )}
 
-        {/* Current hero image */}
         <div
           key={heroSlide.transition}
           className="hero-image hero-image--enter"
@@ -115,15 +162,16 @@ export default function HomePage() {
           </span>
 
           <h1>
-            More Than a<br />
+            More Than a
+            <br />
             Neighbourhood.
             <br />
             <em>A Community.</em>
           </h1>
 
           <p>
-            Discover LourierPark. Explore our community, meet the people behind
-            it and stay connected with everything happening around us.
+            Discover LourierPark. Explore our community, meet the people
+            behind it and stay connected with everything happening around us.
           </p>
 
           <div className="hero-actions">
@@ -150,10 +198,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* COMMUNITY IMAGE BELT */}
+      {/* =====================================================
+          COMMUNITY IMAGE BELT
+      ===================================================== */}
+
       <section
         className="image-belt-section"
         aria-label="Community-inspired photography"
+        data-reveal="up"
       >
         <div className="belt-label">
           <span>THE FEEL OF COMMUNITY</span>
@@ -168,7 +220,7 @@ export default function HomePage() {
             <div className="belt-image" key={`${src}-${i}`}>
               <img
                 src={src}
-                alt="Illustrative neighbourhood and community scene"
+                alt="LourierPark community and neighbourhood scene"
                 loading="lazy"
               />
 
@@ -182,11 +234,13 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* OUR STORY SECTION */}
+      {/* =====================================================
+          OUR STORY SECTION
+      ===================================================== */}
+
       <section className="story-section section-pad">
         <div className="container story-grid">
-
-          <div className="story-visual">
+          <div className="story-visual" data-reveal="left">
             <img
               className="story-main-image"
               src={imageUrls.people}
@@ -205,11 +259,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="story-copy">
+          <div className="story-copy" data-reveal="right">
             <span className="eyebrow">A PLACE TO CALL HOME</span>
 
             <h2>
-              It’s the little things that make a <em>community.</em>
+              It’s the little things that make a{" "}
+              <em>community.</em>
             </h2>
 
             <p className="story-lead">
@@ -219,24 +274,25 @@ export default function HomePage() {
 
             <p>
               LourierPark is a neighbourhood with a story still being written.
-              This is a place to discover what’s around us, celebrate the people
-              who make a difference and keep up with the things that matter
-              locally.
+              This is a place to discover what’s around us, celebrate the
+              people who make a difference and keep up with the things that
+              matter locally.
             </p>
 
             <Link to="/about" className="text-link">
               Get to know LourierPark <ArrowUpRight size={16} />
             </Link>
           </div>
-
         </div>
       </section>
 
-      {/* COMMUNITY NEWS SECTION */}
+      {/* =====================================================
+          COMMUNITY NEWS SECTION
+      ===================================================== */}
+
       <section className="news-section section-pad">
         <div className="container">
-
-          <div className="section-topline">
+          <div className="section-topline" data-reveal="up">
             <SectionHeading
               eyebrow="THE LATEST FROM AROUND US"
               title={
@@ -262,6 +318,7 @@ export default function HomePage() {
               <article
                 className={`news-card ${i === 0 ? "featured" : ""}`}
                 key={item.title}
+                data-reveal="up"
               >
                 <Link to="/community" className="news-image">
                   <img
@@ -300,15 +357,16 @@ export default function HomePage() {
           >
             All community stories <ArrowUpRight size={16} />
           </Link>
-
         </div>
       </section>
 
-      {/* COMMUNITY EVENTS SECTION */}
+      {/* =====================================================
+          COMMUNITY EVENTS SECTION
+      ===================================================== */}
+
       <section className="events-section section-pad">
         <div className="container events-layout">
-
-          <div className="events-intro">
+          <div className="events-intro" data-reveal="left">
             <span className="eyebrow">MAKE A DATE OF IT</span>
 
             <h2>
@@ -332,7 +390,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="event-feature">
+          <div className="event-feature" data-reveal="right">
             <img
               src={imageUrls.market}
               alt="Outdoor market scene"
@@ -351,8 +409,8 @@ export default function HomePage() {
               </h3>
 
               <p>
-                Community events and gatherings will appear here as they are
-                confirmed.
+                Community events and gatherings will appear here as they
+                are confirmed.
               </p>
 
               <Link to="/community">
@@ -362,15 +420,16 @@ export default function HomePage() {
 
             <span className="event-corner">L.</span>
           </div>
-
         </div>
       </section>
 
-      {/* EXPLORE SECTION */}
+      {/* =====================================================
+          EXPLORE SECTION
+      ===================================================== */}
+
       <section className="explore-section section-pad">
         <div className="container">
-
-          <div className="section-topline">
+          <div className="section-topline" data-reveal="up">
             <SectionHeading
               eyebrow="GET TO KNOW YOUR SURROUNDINGS"
               title={
@@ -397,8 +456,13 @@ export default function HomePage() {
                 to={item.href}
                 className="explore-card"
                 key={item.title}
+                data-reveal="up"
               >
-                <img src={item.image} alt="" loading="lazy" />
+                <img
+                  src={item.image}
+                  alt=""
+                  loading="lazy"
+                />
 
                 <div className="explore-card-shade" />
 
@@ -417,15 +481,16 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* COMMUNITY MAP SECTION */}
+      {/* =====================================================
+          COMMUNITY MAP SECTION
+      ===================================================== */}
+
       <section className="map-section section-pad">
         <div className="container map-layout">
-
-          <div className="map-copy">
+          <div className="map-copy" data-reveal="left">
             <span className="eyebrow">FIND YOUR WAY AROUND</span>
 
             <h2>
@@ -435,22 +500,23 @@ export default function HomePage() {
             </h2>
 
             <p>
-              Get to know the local places, services and spaces that make up
-              everyday life in LourierPark.
+              Get to know the local places, services and spaces that make
+              up everyday life in LourierPark.
             </p>
 
-            <Link to="/explore" className="text-link">
+            <Link to="/map" className="text-link">
               Explore the neighbourhood <ArrowUpRight size={16} />
             </Link>
 
             <span className="map-footnote">
-              Map locations and neighbourhood boundaries will be added after
-              geographic details are verified.
+              Map locations and neighbourhood boundaries will be added
+              after geographic details are verified.
             </span>
           </div>
 
           <div
             className="map-art"
+            data-reveal="zoom"
             role="img"
             aria-label="Decorative map-inspired illustration. Not a geographic map."
           >
@@ -468,7 +534,6 @@ export default function HomePage() {
               <i />
               <i />
               <i />
-
               <b />
               <b />
               <b />
@@ -493,13 +558,14 @@ export default function HomePage() {
               </span>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* GET INVOLVED SECTION */}
-      <section className="participate-section">
+      {/* =====================================================
+          GET INVOLVED SECTION
+      ===================================================== */}
 
+      <section className="participate-section">
         <div
           className="participate-bg"
           style={{
@@ -509,8 +575,13 @@ export default function HomePage() {
 
         <div className="participate-overlay" />
 
-        <div className="container participate-content">
-          <span className="eyebrow">THIS IS YOUR COMMUNITY, TOO</span>
+        <div
+          className="container participate-content"
+          data-reveal="up"
+        >
+          <span className="eyebrow">
+            THIS IS YOUR COMMUNITY, TOO
+          </span>
 
           <h2>
             Your Neighbourhood.
@@ -519,9 +590,9 @@ export default function HomePage() {
           </h2>
 
           <p>
-            Know a local business? Have a story to share? Want to tell us about
-            an event? Help us make this a place that reflects the people who
-            call it home.
+            Know a local business? Have a story to share? Want to tell us
+            about an event? Help us make this a place that reflects the
+            people who call it home.
           </p>
 
           <Link
@@ -533,7 +604,6 @@ export default function HomePage() {
         </div>
 
         <span className="participate-watermark">L.</span>
-
       </section>
     </>
   );
