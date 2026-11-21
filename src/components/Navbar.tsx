@@ -32,11 +32,11 @@ const menus = {
     },
   ],
   Explore: [
-    {
-      title: "Local businesses",
-      desc: "Independent businesses and services",
-      href: "/explore",
-    },
+  {
+    title: "Local businesses",
+    desc: "Independent businesses and services",
+    href: "/local-businesses",
+  },
     {
       title: "Community facilities",
       desc: "Useful places and local institutions",
