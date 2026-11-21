@@ -1,31 +1,36 @@
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { ChevronDown, Menu, X, ArrowUpRight } from "lucide-react";
+import {
+  ChevronDown,
+  Menu,
+  X,
+  ArrowUpRight,
+} from "lucide-react";
 
 const menus = {
   Discover: [
-  {
-    title: "About LourierPark",
-    desc: "Get to know our neighbourhood",
-    href: "/about",
-  },
-  {
-    title: "Our neighbourhood",
-    desc: "The places and character that shape us",
-    href: "/neighbourhood",
-  },
-  {
-    title: "Community map",
-    desc: "Explore local places on the map",
-    href: "/map",
-  },
-  {
-    title: "Gallery",
-    desc: "Moments from community life",
-    href: "/gallery",
-  },
-],
+    {
+      title: "About LourierPark",
+      desc: "Get to know our neighbourhood",
+      href: "/about",
+    },
+    {
+      title: "Our neighbourhood",
+      desc: "The places and character that shape us",
+      href: "/neighbourhood",
+    },
+    {
+      title: "Community map",
+      desc: "Explore local places on the map",
+      href: "/map",
+    },
+    {
+      title: "Gallery",
+      desc: "Moments from community life",
+      href: "/gallery",
+    },
+  ],
   Explore: [
     {
       title: "Local businesses",
@@ -71,17 +76,55 @@ type MenuKey = keyof typeof menus;
 
 export function Navbar() {
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
+  const [isMegaClosing, setIsMegaClosing] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const closeTimer = useRef<number | null>(null);
+
+  const clearCloseTimer = () => {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const showMenu = (menu: MenuKey) => {
+    clearCloseTimer();
+    setIsMegaClosing(false);
+    setOpenMenu(menu);
+  };
+
+  const hideMenu = () => {
+    if (!openMenu || isMegaClosing) return;
+
+    setIsMegaClosing(true);
+
+    closeTimer.current = window.setTimeout(() => {
+      setOpenMenu(null);
+      setIsMegaClosing(false);
+      closeTimer.current = null;
+    }, 260);
+  };
+
   const close = () => {
-    setOpenMenu(null);
+    hideMenu();
     setMobileOpen(false);
   };
+
+  useEffect(() => {
+    return () => clearCloseTimer();
+  }, []);
 
   return (
     <header
       className="site-header"
-      onMouseLeave={() => setOpenMenu(null)}
+      onMouseLeave={hideMenu}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          hideMenu();
+          setMobileOpen(false);
+        }
+      }}
     >
       <div className="nav-shell">
         {/* BRAND */}
@@ -113,25 +156,30 @@ export function Navbar() {
             Home
           </NavLink>
 
-          {Object.entries(menus).map(([label]) => (
-            <button
-              key={label}
-              className={`nav-link nav-menu-trigger ${
-                openMenu === label ? "active" : ""
-              }`}
-              onClick={() =>
-                setOpenMenu(
-                  openMenu === label ? null : (label as MenuKey)
-                )
-              }
-              onMouseEnter={() => setOpenMenu(label as MenuKey)}
-              aria-expanded={openMenu === label}
-              aria-haspopup="true"
-            >
-              {label}
-              <ChevronDown size={14} strokeWidth={1.8} />
-            </button>
-          ))}
+          {Object.entries(menus).map(([label]) => {
+            const menuKey = label as MenuKey;
+            const isOpen = openMenu === menuKey;
+
+            return (
+              <button
+                key={label}
+                type="button"
+                className={`nav-link nav-menu-trigger ${
+                  isOpen ? "active" : ""
+                }`}
+                onClick={() =>
+                  isOpen ? hideMenu() : showMenu(menuKey)
+                }
+                onMouseEnter={() => showMenu(menuKey)}
+                aria-expanded={isOpen}
+                aria-haspopup="true"
+                aria-controls="desktop-mega-menu"
+              >
+                {label}
+                <ChevronDown size={14} strokeWidth={1.8} />
+              </button>
+            );
+          })}
 
           <NavLink
             to="/contact"
@@ -143,15 +191,16 @@ export function Navbar() {
           </NavLink>
         </nav>
 
-        {/* GET INVOLVED BUTTON */}
-        <Link to="/contact" className="nav-cta">
+        {/* GET INVOLVED */}
+        <Link to="/contact" className="nav-cta" onClick={close}>
           Get involved <ArrowUpRight size={15} />
         </Link>
 
         {/* MOBILE TOGGLE */}
         <button
+          type="button"
           className="mobile-toggle"
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() => setMobileOpen((previous) => !previous)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
         >
@@ -161,7 +210,13 @@ export function Navbar() {
 
       {/* DESKTOP MEGA MENU */}
       {openMenu && (
-        <div className="mega-wrap">
+        <div
+          id="desktop-mega-menu"
+          className={`mega-wrap ${
+            isMegaClosing ? "is-closing" : ""
+          }`}
+          aria-label={`${openMenu} navigation`}
+        >
           <div className="mega-menu">
             <div className="mega-intro">
               <span className="eyebrow">EXPLORE LOURIERPARK</span>
@@ -173,8 +228,8 @@ export function Navbar() {
               </h3>
 
               <p>
-                Find your way around the people, places and stories that make
-                this community home.
+                Find your way around the people, places and stories that
+                make this community home.
               </p>
             </div>
 
@@ -235,6 +290,10 @@ export function Navbar() {
           <NavLink to="/contact" onClick={close}>
             Contact
           </NavLink>
+
+          <Link to="/contact" className="mobile-cta" onClick={close}>
+            Get involved <ArrowUpRight size={16} />
+          </Link>
         </div>
       )}
     </header>
