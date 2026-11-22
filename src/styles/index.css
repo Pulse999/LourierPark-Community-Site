@@ -4890,3 +4890,337 @@ html.has-scroll-reveal [data-reveal].is-visible {
     transition: none;
   }
 }
+
+
+/* =========================================
+   BUSINESS CATEGORY LISTINGS
+========================================= */
+
+.business-listing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 42px;
+}
+
+.business-listing-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid rgba(9, 43, 64, 0.09);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.business-listing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 45px rgba(9, 43, 64, 0.09);
+}
+
+.business-listing-image {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  background: var(--sage);
+}
+
+.business-listing-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.business-listing-card:hover .business-listing-image img {
+  transform: scale(1.04);
+}
+
+.business-featured-label {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  padding: 8px 12px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.business-listing-arrow {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  color: var(--navy);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.business-listing-card:hover .business-listing-arrow {
+  background: var(--green);
+  color: #fff;
+}
+
+.business-listing-content {
+  padding: 28px;
+}
+
+.business-listing-category {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.business-listing-content h3 {
+  margin: 0 0 9px;
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.business-listing-tagline {
+  margin: 0 0 14px;
+  color: var(--green);
+  font-size: 14px;
+}
+
+.business-listing-description {
+  margin: 0;
+  color: var(--slate);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.business-listing-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.business-listing-services span {
+  padding: 8px 10px;
+  background: var(--warm);
+  color: var(--slate);
+  font-size: 11px;
+}
+
+.business-listing-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 760px) {
+  .business-listing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .business-listing-image {
+    height: 230px;
+  }
+
+  .business-listing-content {
+    padding: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .business-listing-card,
+  .business-listing-image img,
+  .business-listing-arrow {
+    transition: none;
+  }
+
+  .business-listing-card:hover {
+    transform: none;
+  }
+
+  .business-listing-card:hover .business-listing-image img {
+    transform: none;
+  }
+}
+
+
+/* =========================================
+   BUSINESS SEARCH AND FILTERS
+========================================= */
+
+.business-filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 32px 0 28px;
+}
+
+.business-search-box {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 240px;
+  gap: 12px;
+  padding: 0 17px;
+  min-height: 54px;
+  background: #fff;
+  border: 1px solid rgba(9, 43, 64, 0.12);
+  color: var(--slate);
+  transition: border-color 0.2s ease;
+}
+
+.business-search-box:focus-within {
+  border-color: var(--green);
+}
+
+.business-search-box input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--navy);
+  font: inherit;
+  font-size: 13px;
+}
+
+.business-search-box input::placeholder {
+  color: #89949a;
+}
+
+.business-search-box input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.business-search-clear {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 0;
+  padding: 5px;
+  background: transparent;
+  color: var(--slate);
+  cursor: pointer;
+}
+
+.business-service-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 15px;
+  background: #fff;
+  border: 1px solid rgba(9, 43, 64, 0.12);
+  color: var(--green);
+}
+
+.business-service-filter select {
+  min-width: 145px;
+  max-width: 220px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--navy);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.business-filter-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.business-filter-reset:hover {
+  color: var(--navy);
+}
+
+.business-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 65px 25px;
+  margin-top: 25px;
+  background: #fff;
+  border: 1px solid rgba(9, 43, 64, 0.09);
+}
+
+.business-no-results-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  background: var(--sage);
+  color: var(--green);
+}
+
+.business-no-results h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: 27px;
+  font-weight: 400;
+}
+
+.business-no-results p {
+  max-width: 430px;
+  margin: 0;
+  color: var(--slate);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.business-no-results .business-filter-reset {
+  margin-top: 15px;
+}
+
+@media (max-width: 600px) {
+  .business-filter-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .business-search-box,
+  .business-service-filter {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .business-service-filter select {
+    flex: 1;
+    max-width: none;
+  }
+
+  .business-filter-reset {
+    align-self: flex-start;
+  }
+}
