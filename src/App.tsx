@@ -8,6 +8,7 @@ import AboutPage from "../pages/AboutPage";
 import NeighbourhoodPage from "../pages/NeighbourhoodPage";
 import CommunityMapPage from "../pages/CommunityMapPage";
 import GalleryPage from "../pages/GalleryPage";
+import LocalBusinessesPage from "../pages/LocalBusinessesPage";
 
 export default function App() {
   return (
@@ -20,6 +21,12 @@ export default function App() {
         <Route path="/neighbourhood" element={<NeighbourhoodPage />} />
         <Route path="/map" element={<CommunityMapPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
+        
+        {/* Explore */}
+        <Route
+  path="/local-businesses"
+  element={<LocalBusinessesPage />}
+/>
 
         {/* Existing pages — kept intact */}
         <Route
