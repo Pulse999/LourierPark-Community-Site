@@ -1,6 +1,6 @@
 
+
 import { useMemo, useState } from "react";
-import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowDown,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { businessCategories } from "../src/data/businesses";
+
 
 export default function LocalBusinessesPage() {
   const [searchTerm, setSearchTerm] = useState("");
