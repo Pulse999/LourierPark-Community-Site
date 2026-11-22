@@ -4523,3 +4523,370 @@ html.has-scroll-reveal [data-reveal].is-visible {
     line-height: 1.7;
   }
 }
+
+
+/* =========================================
+   LOURIERPARK — BUSINESS PROFILE
+========================================= */
+
+.business-profile-page {
+  background: var(--warm);
+}
+
+.business-profile-hero {
+  position: relative;
+  min-height: 540px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--navy);
+}
+
+.business-profile-cover-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.business-profile-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 25, 37, 0.88) 0%,
+    rgba(5, 25, 37, 0.58) 55%,
+    rgba(5, 25, 37, 0.18) 100%
+  );
+}
+
+.business-profile-hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-top: 100px;
+  padding-bottom: 75px;
+  color: white;
+}
+
+.business-profile-breadcrumb {
+  margin-bottom: 75px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.business-profile-breadcrumb a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.business-profile-breadcrumb span:last-child {
+  color: white;
+}
+
+.business-profile-hero h1 {
+  margin: 18px 0 12px;
+  color: white;
+  font-family: var(--serif);
+  font-size: clamp(52px, 7vw, 88px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.business-profile-hero-content > p {
+  max-width: 560px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.business-profile-content {
+  padding-top: 65px;
+}
+
+.business-profile-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 75px;
+  align-items: start;
+  margin-top: 50px;
+}
+
+.business-profile-main {
+  min-width: 0;
+}
+
+.business-profile-section {
+  padding-bottom: 55px;
+  margin-bottom: 50px;
+  border-bottom: 1px solid rgba(9, 43, 64, 0.12);
+}
+
+.business-profile-section h2 {
+  margin: 13px 0 20px;
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: clamp(34px, 4vw, 46px);
+  font-weight: 400;
+}
+
+.business-profile-section h2 em {
+  color: var(--green);
+  font-weight: 400;
+}
+
+.business-profile-section > p {
+  color: var(--slate);
+  font-size: 14px;
+  line-height: 2;
+}
+
+.business-profile-services {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 25px;
+}
+
+.business-profile-services > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px;
+  background: white;
+  border: 1px solid rgba(9, 43, 64, 0.07);
+  color: var(--navy);
+  font-size: 13px;
+}
+
+.business-profile-services > div > span {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.business-profile-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.business-profile-gallery img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.business-profile-gallery img:hover {
+  transform: scale(1.02);
+}
+
+.business-profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.business-profile-card {
+  padding: 27px;
+  background: white;
+  border: 1px solid rgba(9, 43, 64, 0.08);
+}
+
+.business-profile-card h3 {
+  margin: 12px 0 22px;
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.business-profile-card > p {
+  color: var(--slate);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.business-profile-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.business-profile-contact-list a,
+.business-profile-detail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--slate);
+  font-size: 12px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.business-profile-contact-list a:hover {
+  color: var(--green);
+}
+
+.business-profile-contact-list svg,
+.business-profile-detail svg {
+  flex-shrink: 0;
+  color: var(--green);
+}
+
+.business-profile-hours-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  color: var(--green);
+  font-size: 12px;
+}
+
+.business-profile-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.business-profile-hours > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--slate);
+  font-size: 11px;
+}
+
+.business-profile-hours > div span:last-child {
+  color: var(--navy);
+  text-align: right;
+}
+
+.business-profile-hours .is-closed {
+  color: #a65d45 !important;
+}
+
+.business-profile-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.business-profile-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--sage);
+  color: var(--green);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.business-profile-socials a:hover {
+  background: var(--green);
+  color: white;
+}
+
+.business-profile-return {
+  padding: 35px 0;
+  border-top: 1px solid rgba(9, 43, 64, 0.12);
+}
+
+.business-profile-return a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.business-profile-not-found {
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+}
+
+.business-profile-not-found > .container > svg {
+  display: block;
+  margin-bottom: 25px;
+  color: var(--green);
+}
+
+.business-profile-not-found h1 {
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: 55px;
+  font-weight: 400;
+}
+
+.business-profile-not-found p {
+  max-width: 500px;
+  margin-bottom: 25px;
+  color: var(--slate);
+  line-height: 1.8;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .business-profile-layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .business-profile-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .business-profile-hero {
+    min-height: 480px;
+  }
+
+  .business-profile-hero-content {
+    padding-top: 80px;
+    padding-bottom: 55px;
+  }
+
+  .business-profile-breadcrumb {
+    margin-bottom: 55px;
+    gap: 7px;
+    font-size: 10px;
+  }
+
+  .business-profile-layout {
+    margin-top: 35px;
+  }
+
+  .business-profile-services {
+    grid-template-columns: 1fr;
+  }
+
+  .business-profile-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .business-profile-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .business-profile-gallery img {
+    height: 230px;
+  }
+
+  .business-profile-card {
+    padding: 23px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .business-profile-gallery img,
+  .business-profile-socials a {
+    transition: none;
+  }
+}
