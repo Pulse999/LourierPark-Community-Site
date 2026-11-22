@@ -9,6 +9,7 @@ import NeighbourhoodPage from "../pages/NeighbourhoodPage";
 import CommunityMapPage from "../pages/CommunityMapPage";
 import GalleryPage from "../pages/GalleryPage";
 import LocalBusinessesPage from "../pages/LocalBusinessesPage";
+import BusinessCategoryPage from "../pages/BusinessCategoryPage";
 
 export default function App() {
   return (
@@ -21,12 +22,13 @@ export default function App() {
         <Route path="/neighbourhood" element={<NeighbourhoodPage />} />
         <Route path="/map" element={<CommunityMapPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
-        
+
         {/* Explore */}
+        <Route path="/local-businesses" element={<LocalBusinessesPage />} />
         <Route
-  path="/local-businesses"
-  element={<LocalBusinessesPage />}
-/>
+          path="/local-businesses/:categoryId"
+          element={<BusinessCategoryPage />}
+        />
 
         {/* Existing pages — kept intact */}
         <Route
