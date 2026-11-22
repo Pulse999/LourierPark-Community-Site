@@ -65,7 +65,7 @@ export const businessListings: Business[] = [
       "/images/LP-Park.jpg",
     ],
     featured: true,
-    status: "draft",
+    status: "published",
   },
 ];
 
