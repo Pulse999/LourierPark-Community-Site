@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
@@ -24,10 +23,7 @@ export default function LocalBusinessesPage() {
   const [selectedService, setSelectedService] = useState("");
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
-  const businesses = useMemo(
-    () => getPublishedBusinesses(),
-    []
-  );
+  const businesses = useMemo(() => getPublishedBusinesses(), []);
 
   const query = searchTerm.trim().toLowerCase();
 
@@ -47,20 +43,18 @@ export default function LocalBusinessesPage() {
   }, [query]);
 
   // Only show services currently offered by published businesses.
-  
-const availableServices = useMemo(() => {
-  const relevantBusinesses = selectedCategory
-    ? businesses.filter(
-        (business) => business.categoryId === selectedCategory
-      )
-    : businesses;
 
-  return Array.from(
-    new Set(
-      relevantBusinesses.flatMap((business) => business.services)
-    )
-  ).sort((a, b) => a.localeCompare(b));
-}, [businesses, selectedCategory]);
+  const availableServices = useMemo(() => {
+    const relevantBusinesses = selectedCategory
+      ? businesses.filter(
+          (business) => business.categoryId === selectedCategory,
+        )
+      : businesses;
+
+    return Array.from(
+      new Set(relevantBusinesses.flatMap((business) => business.services)),
+    ).sort((a, b) => a.localeCompare(b));
+  }, [businesses, selectedCategory]);
 
   // Search across all published businesses and apply filters.
   const filteredBusinesses = useMemo(() => {
@@ -78,40 +72,24 @@ const availableServices = useMemo(() => {
         .join(" ")
         .toLowerCase();
 
-      const matchesSearch =
-        !query || searchableText.includes(query);
+      const matchesSearch = !query || searchableText.includes(query);
 
       const matchesCategory =
-        !selectedCategory ||
-        business.categoryId === selectedCategory;
+        !selectedCategory || business.categoryId === selectedCategory;
 
       const matchesService =
-        !selectedService ||
-        business.services.includes(selectedService);
+        !selectedService || business.services.includes(selectedService);
 
-      const matchesFeatured =
-        !featuredOnly || business.featured;
+      const matchesFeatured = !featuredOnly || business.featured;
 
       return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesService &&
-        matchesFeatured
+        matchesSearch && matchesCategory && matchesService && matchesFeatured
       );
     });
-  }, [
-    businesses,
-    query,
-    selectedCategory,
-    selectedService,
-    featuredOnly,
-  ]);
+  }, [businesses, query, selectedCategory, selectedService, featuredOnly]);
 
   const hasActiveFilters = Boolean(
-    searchTerm.trim() ||
-    selectedCategory ||
-    selectedService ||
-    featuredOnly
+    searchTerm.trim() || selectedCategory || selectedService || featuredOnly,
   );
 
   const clearFilters = () => {
@@ -123,7 +101,6 @@ const availableServices = useMemo(() => {
 
   return (
     <div className="interior-page business-page">
-
       {/* HERO */}
       <section className="interior-hero business-hero">
         <div className="interior-hero-image">
@@ -136,9 +113,7 @@ const availableServices = useMemo(() => {
         <div className="interior-hero-overlay" />
 
         <div className="container interior-hero-content">
-          <span className="eyebrow">
-            EXPLORE LOURIERPARK · LOCAL DIRECTORY
-          </span>
+          <span className="eyebrow">EXPLORE LOURIERPARK · LOCAL DIRECTORY</span>
 
           <h1>
             Discover local.
@@ -152,10 +127,7 @@ const availableServices = useMemo(() => {
             neighbourhood work.
           </p>
 
-          <a
-            href="#business-directory"
-            className="button button-gold"
-          >
+          <a href="#business-directory" className="button button-gold">
             Explore the directory
             <ArrowDown size={16} />
           </a>
@@ -170,9 +142,7 @@ const availableServices = useMemo(() => {
       <section className="business-intro-section section-pad">
         <div className="container business-intro-layout">
           <div>
-            <span className="eyebrow">
-              THE LOCAL DIRECTORY
-            </span>
+            <span className="eyebrow">THE LOCAL DIRECTORY</span>
 
             <h2 className="interior-heading">
               Good things are
@@ -183,8 +153,8 @@ const availableServices = useMemo(() => {
           <div className="business-intro-copy">
             <p>
               Our neighbourhood is home to people with skills, ideas and
-              businesses worth discovering. This directory is being developed
-              to make it easier to find local services and support the people
+              businesses worth discovering. This directory is being developed to
+              make it easier to find local services and support the people
               behind them.
             </p>
 
@@ -201,13 +171,10 @@ const availableServices = useMemo(() => {
         id="business-directory"
       >
         <div className="container">
-
           {/* DIRECTORY HEADING */}
           <div className="section-topline business-directory-heading">
             <div>
-              <span className="eyebrow">
-                FIND WHAT YOU NEED
-              </span>
+              <span className="eyebrow">FIND WHAT YOU NEED</span>
 
               <h2 className="interior-heading">
                 Browse the
@@ -215,8 +182,8 @@ const availableServices = useMemo(() => {
               </h2>
 
               <p>
-                Search local businesses, explore services and discover
-                people working in your neighbourhood.
+                Search local businesses, explore services and discover people
+                working in your neighbourhood.
               </p>
             </div>
 
@@ -256,9 +223,10 @@ const availableServices = useMemo(() => {
 
               <select
                 value={selectedCategory}
-                onChange={(event) =>
-                  setSelectedCategory(event.target.value)
-                }
+                onChange={(event) => {
+                  setSelectedCategory(event.target.value);
+                  setSelectedService("");
+                }}
                 aria-label="Filter by business category"
               >
                 <option value="">All categories</option>
@@ -276,9 +244,10 @@ const availableServices = useMemo(() => {
 
               <select
                 value={selectedService}
-                onChange={(event) =>
-                  setSelectedService(event.target.value)
-                }
+                onChange={(event) => {
+                  setSelectedCategory(event.target.value);
+                  setSelectedService("");
+                }}
                 aria-label="Filter by service"
               >
                 <option value="">All services</option>
@@ -295,9 +264,10 @@ const availableServices = useMemo(() => {
               <input
                 type="checkbox"
                 checked={featuredOnly}
-                onChange={(event) =>
-                  setFeaturedOnly(event.target.checked)
-                }
+                onChange={(event) => {
+                  setSelectedCategory(event.target.value);
+                  setSelectedService("");
+                }}
               />
               <span>Featured businesses only</span>
             </label>
@@ -319,10 +289,10 @@ const availableServices = useMemo(() => {
             <div className="business-directory-categories">
               <div className="business-directory-subheading">
                 <div>
-                  <span className="eyebrow">
-                    EXPLORE BY CATEGORY
-                  </span>
-                  <h3>Find a service <em>nearby.</em></h3>
+                  <span className="eyebrow">EXPLORE BY CATEGORY</span>
+                  <h3>
+                    Find a service <em>nearby.</em>
+                  </h3>
                 </div>
 
                 <span className="listing-count">
@@ -377,26 +347,21 @@ const availableServices = useMemo(() => {
           <div className="business-directory-results">
             <div className="business-directory-subheading">
               <div>
-                <span className="eyebrow">
-                  THE LOCAL DIRECTORY
-                </span>
+                <span className="eyebrow">THE LOCAL DIRECTORY</span>
                 <h3>
                   Local businesses <em>worth discovering.</em>
                 </h3>
               </div>
 
               <span className="listing-count">
-                {filteredBusinesses.length.toString().padStart(2, "0")}{" "}
-                RESULTS
+                {filteredBusinesses.length.toString().padStart(2, "0")} RESULTS
               </span>
             </div>
 
             {filteredBusinesses.length > 0 ? (
               <div className="business-listing-grid">
                 {filteredBusinesses.map((business) => {
-                  const category = getBusinessCategory(
-                    business.categoryId
-                  );
+                  const category = getBusinessCategory(business.categoryId);
 
                   return (
                     <Link
@@ -463,8 +428,8 @@ const availableServices = useMemo(() => {
                 <h3>No matching businesses found.</h3>
 
                 <p>
-                  Try another search term or adjust your filters to
-                  discover more local businesses.
+                  Try another search term or adjust your filters to discover
+                  more local businesses.
                 </p>
 
                 <button
@@ -483,8 +448,8 @@ const availableServices = useMemo(() => {
           {filteredCategories.length === 0 && query && (
             <div className="business-no-category-match">
               <p>
-                No categories match your search. You can still browse
-                the business results above.
+                No categories match your search. You can still browse the
+                business results above.
               </p>
             </div>
           )}
@@ -499,9 +464,7 @@ const availableServices = useMemo(() => {
           </div>
 
           <div className="business-owner-copy">
-            <span className="eyebrow">
-              ARE YOU A LOCAL BUSINESS OWNER?
-            </span>
+            <span className="eyebrow">ARE YOU A LOCAL BUSINESS OWNER?</span>
 
             <h2>
               Your business
@@ -515,10 +478,7 @@ const availableServices = useMemo(() => {
             </p>
           </div>
 
-          <Link
-            to="/contact"
-            className="button button-gold"
-          >
+          <Link to="/contact" className="button button-gold">
             Get your business listed
             <ArrowUpRight size={16} />
           </Link>
