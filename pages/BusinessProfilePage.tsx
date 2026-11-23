@@ -27,6 +27,47 @@ export default function BusinessProfilePage() {
     businessSlug: string;
   }>();
 
+  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(
+  null
+);
+
+const closeGallery = () => setActiveImageIndex(null);
+
+const showPreviousImage = () => {
+  if (!business || activeImageIndex === null) return;
+
+  setActiveImageIndex(
+    (activeImageIndex - 1 + business.gallery.length) %
+      business.gallery.length
+  );
+};
+
+const showNextImage = () => {
+  if (!business || activeImageIndex === null) return;
+
+  setActiveImageIndex(
+    (activeImageIndex + 1) % business.gallery.length
+  );
+};
+
+useEffect(() => {
+  if (activeImageIndex === null) return;
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Escape") closeGallery();
+    if (event.key === "ArrowLeft") showPreviousImage();
+    if (event.key === "ArrowRight") showNextImage();
+  };
+
+  document.body.style.overflow = "hidden";
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => {
+    document.body.style.overflow = "";
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, [activeImageIndex]);
+
   const business =
     businessSlug && categoryId
       ? getBusinessBySlug(businessSlug, categoryId)
