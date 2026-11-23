@@ -1,8 +1,12 @@
 
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
 import {
   ArrowLeft,
   ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
   Clock3,
   Facebook,
   Globe,
@@ -11,6 +15,7 @@ import {
   MapPin,
   Phone,
   Store,
+  X,
 } from "lucide-react";
 
 import { getBusinessBySlug } from "../src/data/businessListings";
