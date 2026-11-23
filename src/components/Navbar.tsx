@@ -239,11 +239,14 @@ export function Navbar() {
             </div>
 
             <div className="mega-note">
-              <img
-                src="/images/LourierPark-Neighbourhood-Logo.png"
-                alt="LourierPark - Our Neighbourhood, Our Home"
-                className="mega-note-logo"
-              />
+              <span className="brand-mark">
+                LOURIER<span></span><span>PARK</span>
+              </span>
+
+              <span className="brand-copy">
+                
+                <small>OUR NEIGHBOURHOOD, OUR HOME.</small>
+              </span>
             </div>
           </div>
         </div>
