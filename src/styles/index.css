@@ -3228,6 +3228,37 @@ html.has-scroll-reveal [data-reveal].is-visible {
   pointer-events: none;
 }
 
+/* Main navbar logo */
+.brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  width: 190px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Mega menu logo */
+.mega-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: transparent;
+}
+
+.mega-note-logo {
+  display: block;
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+  object-fit: contain;
+}
+
 @keyframes megaMenuEnter {
   0% {
     opacity: 0;
@@ -3890,6 +3921,15 @@ html.has-scroll-reveal [data-reveal].is-visible {
   padding-top: 14px;
   border-top: 1px solid #e9eee9;
   color: var(--green);
+}
+
+.footer-brand-logo {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  object-fit: contain;
+  margin-right: 60;
 }
 
 .business-card-footer span {
