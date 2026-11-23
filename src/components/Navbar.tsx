@@ -128,14 +128,11 @@ export function Navbar() {
           onClick={close}
           aria-label="LourierPark home"
         >
-          <span className="brand-mark">
-            L
-          </span>
-
-          <span className="brand-copy">
-            <strong>OURIERPARK</strong>
-            <small>OUR NEIGHBOURHOOD, OUR HOME.</small>
-          </span>
+          <img
+            src="/images/LourierPark-Neighbourhood-Logo.png"
+            alt="LourierPark - Our Neighbourhood, Our Home"
+            className="brand-logo"
+          />
         </Link>
 
         {/* DESKTOP NAVIGATION */}
@@ -242,12 +239,12 @@ export function Navbar() {
             </div>
 
             <div className="mega-note">
-  <img
-    src="/images/LourierPark-Neighbourhood-Logo.png"
-    alt="LourierPark - Our Neighbourhood, Our Home"
-    className="mega-note-logo"
-  />
-</div>
+              <img
+                src="/images/LourierPark-Neighbourhood-Logo.png"
+                alt="LourierPark - Our Neighbourhood, Our Home"
+                className="mega-note-logo"
+              />
+            </div>
           </div>
         </div>
       )}
