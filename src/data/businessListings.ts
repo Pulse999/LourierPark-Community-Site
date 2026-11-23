@@ -69,6 +69,7 @@ export const businessListings: Business[] = [
   },
 ];
 
+
 export const getBusinessBySlug = (
   slug: string,
   categoryId?: string
@@ -78,6 +79,7 @@ export const getBusinessBySlug = (
       business.slug === slug &&
       (!categoryId || business.categoryId === categoryId)
   );
+
 
 export const getPublishedBusinesses = () =>
   businessListings.filter(
