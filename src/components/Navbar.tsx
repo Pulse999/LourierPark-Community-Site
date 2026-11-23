@@ -1,12 +1,6 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import {
-  ChevronDown,
-  Menu,
-  X,
-  ArrowUpRight,
-} from "lucide-react";
+import { ChevronDown, Menu, X, ArrowUpRight } from "lucide-react";
 
 const menus = {
   Discover: [
@@ -32,11 +26,11 @@ const menus = {
     },
   ],
   Explore: [
-  {
-    title: "Local businesses",
-    desc: "Independent businesses and services",
-    href: "/local-businesses",
-  },
+    {
+      title: "Local businesses",
+      desc: "Independent businesses and services",
+      href: "/local-businesses",
+    },
     {
       title: "Community facilities",
       desc: "Useful places and local institutions",
@@ -134,14 +128,11 @@ export function Navbar() {
           onClick={close}
           aria-label="LourierPark home"
         >
-          <span className="brand-mark">
-            L<span>.</span>
-          </span>
-
-          <span className="brand-copy">
-            <strong>OURIERPARK</strong>
-            <small>OUR NEIGHBOURHOOD, OUR HOME.</small>
-          </span>
+          <img
+            src="/images/LourierPark-Neighbourhood-Logo.png"
+            alt="LourierPark - Our Neighbourhood, Our Home"
+            className="brand-logo"
+          />
         </Link>
 
         {/* DESKTOP NAVIGATION */}
@@ -167,9 +158,7 @@ export function Navbar() {
                 className={`nav-link nav-menu-trigger ${
                   isOpen ? "active" : ""
                 }`}
-                onClick={() =>
-                  isOpen ? hideMenu() : showMenu(menuKey)
-                }
+                onClick={() => (isOpen ? hideMenu() : showMenu(menuKey))}
                 onMouseEnter={() => showMenu(menuKey)}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
@@ -212,9 +201,7 @@ export function Navbar() {
       {openMenu && (
         <div
           id="desktop-mega-menu"
-          className={`mega-wrap ${
-            isMegaClosing ? "is-closing" : ""
-          }`}
+          className={`mega-wrap ${isMegaClosing ? "is-closing" : ""}`}
           aria-label={`${openMenu} navigation`}
         >
           <div className="mega-menu">
@@ -228,8 +215,8 @@ export function Navbar() {
               </h3>
 
               <p>
-                Find your way around the people, places and stories that
-                make this community home.
+                Find your way around the people, places and stories that make
+                this community home.
               </p>
             </div>
 
@@ -252,13 +239,14 @@ export function Navbar() {
             </div>
 
             <div className="mega-note">
-              <span className="mega-note-mark">L.</span>
+              <span className="brand-mark">
+                LOURIER<span></span><span>PARK</span>
+              </span>
 
-              <p>
-                Our Neighbourhood,
-                <br />
-                Our Home.
-              </p>
+              <span className="brand-copy">
+                
+                <small>OUR NEIGHBOURHOOD, OUR HOME.</small>
+              </span>
             </div>
           </div>
         </div>
@@ -276,11 +264,7 @@ export function Navbar() {
               <p>{label}</p>
 
               {items.map((item) => (
-                <Link
-                  key={item.title}
-                  to={item.href}
-                  onClick={close}
-                >
+                <Link key={item.title} to={item.href} onClick={close}>
                   {item.title}
                 </Link>
               ))}

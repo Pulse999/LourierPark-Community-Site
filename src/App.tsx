@@ -10,6 +10,7 @@ import CommunityMapPage from "../pages/CommunityMapPage";
 import GalleryPage from "../pages/GalleryPage";
 import LocalBusinessesPage from "../pages/LocalBusinessesPage";
 import BusinessCategoryPage from "../pages/BusinessCategoryPage";
+import BusinessProfilePage from "../pages/BusinessProfilePage";
 
 export default function App() {
   return (
@@ -28,6 +29,10 @@ export default function App() {
         <Route
           path="/local-businesses/:categoryId"
           element={<BusinessCategoryPage />}
+        />
+        <Route
+          path="/local-businesses/:categoryId/:businessSlug"
+          element={<BusinessProfilePage />}
         />
 
         {/* Existing pages — kept intact */}
