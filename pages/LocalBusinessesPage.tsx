@@ -47,13 +47,20 @@ export default function LocalBusinessesPage() {
   }, [query]);
 
   // Only show services currently offered by published businesses.
-  const availableServices = useMemo(
-    () =>
-      Array.from(
-        new Set(businesses.flatMap((business) => business.services))
-      ).sort((a, b) => a.localeCompare(b)),
-    [businesses]
-  );
+  
+const availableServices = useMemo(() => {
+  const relevantBusinesses = selectedCategory
+    ? businesses.filter(
+        (business) => business.categoryId === selectedCategory
+      )
+    : businesses;
+
+  return Array.from(
+    new Set(
+      relevantBusinesses.flatMap((business) => business.services)
+    )
+  ).sort((a, b) => a.localeCompare(b));
+}, [businesses, selectedCategory]);
 
   // Search across all published businesses and apply filters.
   const filteredBusinesses = useMemo(() => {
