@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -27,46 +26,42 @@ export default function BusinessProfilePage() {
     businessSlug: string;
   }>();
 
-  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(
-  null
-);
+  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
 
-const closeGallery = () => setActiveImageIndex(null);
+  const closeGallery = () => setActiveImageIndex(null);
 
-const showPreviousImage = () => {
-  if (!business || activeImageIndex === null) return;
+  const showPreviousImage = () => {
+    if (!business || activeImageIndex === null) return;
 
-  setActiveImageIndex(
-    (activeImageIndex - 1 + business.gallery.length) %
-      business.gallery.length
-  );
-};
-
-const showNextImage = () => {
-  if (!business || activeImageIndex === null) return;
-
-  setActiveImageIndex(
-    (activeImageIndex + 1) % business.gallery.length
-  );
-};
-
-useEffect(() => {
-  if (activeImageIndex === null) return;
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "Escape") closeGallery();
-    if (event.key === "ArrowLeft") showPreviousImage();
-    if (event.key === "ArrowRight") showNextImage();
+    setActiveImageIndex(
+      (activeImageIndex - 1 + business.gallery.length) %
+        business.gallery.length,
+    );
   };
 
-  document.body.style.overflow = "hidden";
-  window.addEventListener("keydown", handleKeyDown);
+  const showNextImage = () => {
+    if (!business || activeImageIndex === null) return;
 
-  return () => {
-    document.body.style.overflow = "";
-    window.removeEventListener("keydown", handleKeyDown);
+    setActiveImageIndex((activeImageIndex + 1) % business.gallery.length);
   };
-}, [activeImageIndex]);
+
+  useEffect(() => {
+    if (activeImageIndex === null) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeGallery();
+      if (event.key === "ArrowLeft") showPreviousImage();
+      if (event.key === "ArrowRight") showNextImage();
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeImageIndex]);
 
   const business =
     businessSlug && categoryId
@@ -90,14 +85,11 @@ useEffect(() => {
             <h1>Business not found.</h1>
 
             <p>
-              This business listing is unavailable or has not yet
-              been published.
+              This business listing is unavailable or has not yet been
+              published.
             </p>
 
-            <Link
-              to="/local-businesses"
-              className="button button-gold"
-            >
+            <Link to="/local-businesses" className="button button-gold">
               <ArrowLeft size={16} />
               Back to directory
             </Link>
@@ -108,14 +100,10 @@ useEffect(() => {
   }
 
   const hasContactDetails =
-    business.phone ||
-    business.whatsapp ||
-    business.email ||
-    business.website;
+    business.phone || business.whatsapp || business.email || business.website;
 
   return (
     <main className="interior-page business-profile-page">
-
       {/* COVER IMAGE */}
       <section className="business-profile-hero">
         <img
@@ -135,18 +123,28 @@ useEffect(() => {
             <span>/</span>
             <Link to="/local-businesses">Local Businesses</Link>
             <span>/</span>
-            <Link to={`/local-businesses/${category.id}`}>
-              {category.name}
-            </Link>
+            <Link to={`/local-businesses/${category.id}`}>{category.name}</Link>
             <span>/</span>
             <span aria-current="page">{business.name}</span>
           </nav>
 
-          <span className="eyebrow">
-            {category.name.toUpperCase()} · LOURIERPARK
-          </span>
+          <div className="business-profile-identity">
+            <div className="business-profile-logo">
+              {business.logo ? (
+                <img src={business.logo} alt={`${business.name} logo`} />
+              ) : (
+                <Store size={30} strokeWidth={1.5} />
+              )}
+            </div>
 
-          <h1>{business.name}</h1>
+            <div>
+              <span className="eyebrow">
+                {category.name.toUpperCase()} · LOURIERPARK
+              </span>
+
+              <h1>{business.name}</h1>
+            </div>
+          </div>
 
           <p>{business.tagline}</p>
         </div>
@@ -155,7 +153,6 @@ useEffect(() => {
       {/* PROFILE CONTENT */}
       <section className="business-profile-content section-pad">
         <div className="container">
-
           <Link
             to={`/local-businesses/${category.id}`}
             className="business-back-link"
@@ -165,10 +162,8 @@ useEffect(() => {
           </Link>
 
           <div className="business-profile-layout">
-
             {/* MAIN COLUMN */}
             <div className="business-profile-main">
-
               {/* ABOUT */}
               <section className="business-profile-section">
                 <span className="eyebrow">GET TO KNOW THEM</span>
@@ -209,12 +204,23 @@ useEffect(() => {
 
                   <div className="business-profile-gallery">
                     {business.gallery.map((image, index) => (
-                      <img
+                      <button
+                        type="button"
+                        className="business-profile-gallery-item"
                         key={`${image}-${index}`}
-                        src={image}
-                        alt={`${business.name} gallery ${index + 1}`}
-                        loading="lazy"
-                      />
+                        onClick={() => setActiveImageIndex(index)}
+                        aria-label={`View image ${index + 1} of ${business.name}`}
+                      >
+                        <img
+                          src={image}
+                          alt={`${business.name} gallery image ${index + 1}`}
+                          loading="lazy"
+                        />
+
+                        <span className="business-profile-gallery-zoom">
+                          <ArrowUpRight size={20} />
+                        </span>
+                      </button>
                     ))}
                   </div>
                 </section>
@@ -223,7 +229,6 @@ useEffect(() => {
 
             {/* SIDEBAR */}
             <aside className="business-profile-sidebar">
-
               {/* CONTACT */}
               <div className="business-profile-card">
                 <span className="eyebrow">GET IN TOUCH</span>
@@ -290,30 +295,29 @@ useEffect(() => {
               )}
 
               {/* OPENING HOURS */}
-              {business.openingHours &&
-                business.openingHours.length > 0 && (
-                  <div className="business-profile-card">
-                    <span className="eyebrow">WHEN TO VISIT</span>
+              {business.openingHours && business.openingHours.length > 0 && (
+                <div className="business-profile-card">
+                  <span className="eyebrow">WHEN TO VISIT</span>
 
-                    <h3>Opening hours</h3>
+                  <h3>Opening hours</h3>
 
-                    <div className="business-profile-hours-heading">
-                      <Clock3 size={17} />
-                      <span>Operating hours</span>
-                    </div>
-
-                    <div className="business-profile-hours">
-                      {business.openingHours.map((item) => (
-                        <div key={item.day}>
-                          <span>{item.day}</span>
-                          <span className={item.closed ? "is-closed" : ""}>
-                            {item.hours}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="business-profile-hours-heading">
+                    <Clock3 size={17} />
+                    <span>Operating hours</span>
                   </div>
-                )}
+
+                  <div className="business-profile-hours">
+                    {business.openingHours.map((item) => (
+                      <div key={item.day}>
+                        <span>{item.day}</span>
+                        <span className={item.closed ? "is-closed" : ""}>
+                          {item.hours}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* SOCIAL LINKS */}
               {(business.socialLinks?.facebook ||
@@ -348,7 +352,6 @@ useEffect(() => {
                   </div>
                 </div>
               )}
-
             </aside>
           </div>
 
@@ -362,9 +365,68 @@ useEffect(() => {
               Explore more in {category.name}
             </Link>
           </div>
-
         </div>
       </section>
+      {activeImageIndex !== null && business.gallery.length > 0 && (
+        <div
+          className="business-gallery-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${business.name} photo gallery`}
+          onClick={closeGallery}
+        >
+          <button
+            type="button"
+            className="business-gallery-close"
+            onClick={closeGallery}
+            aria-label="Close gallery"
+          >
+            <X size={24} />
+          </button>
+
+          {business.gallery.length > 1 && (
+            <button
+              type="button"
+              className="business-gallery-navigation previous"
+              onClick={(event) => {
+                event.stopPropagation();
+                showPreviousImage();
+              }}
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={28} />
+            </button>
+          )}
+
+          <div
+            className="business-gallery-lightbox-content"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <img
+              src={business.gallery[activeImageIndex]}
+              alt={`${business.name} gallery image ${activeImageIndex + 1}`}
+            />
+
+            <span>
+              {activeImageIndex + 1} / {business.gallery.length}
+            </span>
+          </div>
+
+          {business.gallery.length > 1 && (
+            <button
+              type="button"
+              className="business-gallery-navigation next"
+              onClick={(event) => {
+                event.stopPropagation();
+                showNextImage();
+              }}
+              aria-label="Next image"
+            >
+              <ChevronRight size={28} />
+            </button>
+          )}
+        </div>
+      )}
     </main>
   );
 }
