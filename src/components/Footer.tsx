@@ -11,7 +11,6 @@ export function Footer() {
             alt="LourierPark - Our Neighbourhood, Our Home"
             className="footer-brand-logo"
           />
-          <p>Our Neighbourhood, Our Home.</p>
           <span className="footer-location">
             BLOEMFONTEIN · FREE STATE · SOUTH AFRICA
           </span>
