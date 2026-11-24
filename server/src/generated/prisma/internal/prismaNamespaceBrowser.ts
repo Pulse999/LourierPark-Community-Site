@@ -91,6 +91,7 @@ export const AdminUserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   status: 'status',
+  isSuperAdmin: 'isSuperAdmin',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
