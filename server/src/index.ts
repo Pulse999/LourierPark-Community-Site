@@ -4,7 +4,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-
+import businessCategoryRoutes from "./routes/businessCategory.routes.js";
 import { prisma } from "./lib/prisma.js";
 
 const app = express();
@@ -24,6 +24,9 @@ app.use(
 );
 
 app.use(express.json({ limit: "1mb" }));
+
+// API routes
+app.use("/api/business-categories", businessCategoryRoutes);
 
 // -----------------------------------------------------
 // API HEALTH CHECK
