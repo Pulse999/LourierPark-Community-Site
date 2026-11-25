@@ -7,9 +7,7 @@ import {
   getCurrentAdmin,
 } from "../controllers/auth.controller.js";
 
-import {
-  authenticateAdmin,
-} from "../middleware/auth.middleware.js";
+import { authenticateAdmin } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
