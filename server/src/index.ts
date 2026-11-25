@@ -39,7 +39,7 @@ app.use("/api/business-categories", businessCategoryRoutes);
 // -----------------------------------------------------
 
 app.get("/api/health", (_req, res) => {
-  res.json({
+  res.status(200).json({
     status: "ok",
     message: "LourierPark API is running.",
   });
@@ -53,7 +53,7 @@ app.get("/api/health/database", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
 
-    res.json({
+    res.status(200).json({
       status: "ok",
       message: "Database connection successful.",
       database: "connected",
@@ -68,6 +68,37 @@ app.get("/api/health/database", async (_req, res) => {
     });
   }
 });
+
+// -----------------------------------------------------
+// 404 HANDLER
+// -----------------------------------------------------
+
+app.use((_req, res) => {
+  res.status(404).json({
+    status: "error",
+    message: "API endpoint not found.",
+  });
+});
+
+// -----------------------------------------------------
+// CENTRAL ERROR HANDLER
+// -----------------------------------------------------
+
+app.use(
+  (
+    error: Error,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    console.error("API error:", error);
+
+    res.status(500).json({
+      status: "error",
+      message: "An unexpected server error occurred.",
+    });
+  }
+);
 
 // -----------------------------------------------------
 // SERVER
