@@ -1,4 +1,7 @@
 
+import "dotenv/config";
+import bcrypt from "bcryptjs";
+
 import { prisma } from "../src/lib/prisma.js";
 
 const categories = [
@@ -130,14 +133,81 @@ const categories = [
   },
 ];
 
-async function main() {
-  console.log("Starting business category seeding...");
+const permissions = [
+  {
+    key: "dashboard.view",
+    module: "dashboard",
+    action: "view",
+    description: "View the administration dashboard.",
+  },
+  {
+    key: "businesses.view",
+    module: "businesses",
+    action: "view",
+    description: "View business directory records.",
+  },
+  {
+    key: "businesses.create",
+    module: "businesses",
+    action: "create",
+    description: "Create business listings.",
+  },
+  {
+    key: "businesses.update",
+    module: "businesses",
+    action: "update",
+    description: "Update business listings.",
+  },
+  {
+    key: "businesses.delete",
+    module: "businesses",
+    action: "delete",
+    description: "Delete business listings.",
+  },
+  {
+    key: "businesses.publish",
+    module: "businesses",
+    action: "publish",
+    description: "Publish and unpublish business listings.",
+  },
+  {
+    key: "businesses.feature",
+    module: "businesses",
+    action: "feature",
+    description: "Feature and unfeature business listings.",
+  },
+  {
+    key: "categories.manage",
+    module: "categories",
+    action: "manage",
+    description: "Manage business categories.",
+  },
+  {
+    key: "admins.manage",
+    module: "admins",
+    action: "manage",
+    description: "Manage administrator accounts.",
+  },
+  {
+    key: "roles.manage",
+    module: "roles",
+    action: "manage",
+    description: "Manage roles and permissions.",
+  },
+  {
+    key: "audit.view",
+    module: "audit",
+    action: "view",
+    description: "View administrative audit logs.",
+  },
+];
+
+async function seedCategories() {
+  console.log("Seeding business categories...");
 
   for (const category of categories) {
     await prisma.businessCategory.upsert({
-      where: {
-        slug: category.slug,
-      },
+      where: { slug: category.slug },
       update: {
         name: category.name,
         description: category.description,
@@ -148,12 +218,142 @@ async function main() {
     });
   }
 
-  console.log(`Successfully seeded ${categories.length} business categories.`);
+  console.log(`Seeded ${categories.length} business categories.`);
+}
+
+async function seedPermissions() {
+  console.log("Seeding administrator permissions...");
+
+  for (const permission of permissions) {
+    await prisma.permission.upsert({
+      where: { key: permission.key },
+      update: {
+        module: permission.module,
+        action: permission.action,
+        description: permission.description,
+      },
+      create: permission,
+    });
+  }
+
+  console.log(`Seeded ${permissions.length} permissions.`);
+}
+
+async function seedSuperAdministrator() {
+  console.log("Setting up the initial administrator...");
+
+  const name = process.env.ADMIN_NAME;
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!name || !email || !password) {
+    throw new Error(
+      "ADMIN_NAME, ADMIN_EMAIL and ADMIN_PASSWORD must be configured."
+    );
+  }
+
+  if (password.length < 12) {
+    throw new Error("Administrator password must be at least 12 characters.");
+  }
+
+  const role = await prisma.role.upsert({
+    where: { slug: "super-administrator" },
+    update: {
+      name: "Super Administrator",
+      description: "Full access to the LourierPark administration system.",
+      isSystem: true,
+    },
+    create: {
+      name: "Super Administrator",
+      slug: "super-administrator",
+      description: "Full access to the LourierPark administration system.",
+      isSystem: true,
+    },
+  });
+
+  const admin = await prisma.adminUser.findUnique({
+    where: { email },
+  });
+
+  let adminUserId: string;
+
+  if (admin) {
+    adminUserId = admin.id;
+
+    await prisma.adminUser.update({
+      where: { id: admin.id },
+      data: {
+        name,
+        status: "ACTIVE",
+        isSuperAdmin: true,
+      },
+    });
+
+    console.log("Existing administrator found. Password was not changed.");
+  } else {
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    const createdAdmin = await prisma.adminUser.create({
+      data: {
+        name,
+        email,
+        passwordHash,
+        status: "ACTIVE",
+        isSuperAdmin: true,
+      },
+    });
+
+    adminUserId = createdAdmin.id;
+
+    console.log("Initial administrator created.");
+  }
+
+  // Assign every seeded permission to the super administrator role.
+  const seededPermissions = await prisma.permission.findMany({
+    where: {
+      key: { in: permissions.map((permission) => permission.key) },
+    },
+    select: { id: true },
+  });
+
+  await prisma.rolePermission.createMany({
+    data: seededPermissions.map((permission) => ({
+      roleId: role.id,
+      permissionId: permission.id,
+    })),
+    skipDuplicates: true,
+  });
+
+  await prisma.adminRole.upsert({
+    where: {
+      adminUserId_roleId: {
+        adminUserId,
+        roleId: role.id,
+      },
+    },
+    update: {},
+    create: {
+      adminUserId,
+      roleId: role.id,
+    },
+  });
+
+  console.log("Super Administrator role and permissions assigned.");
+}
+
+async function main() {
+  console.log("Starting LourierPark database seeding...");
+
+  await seedCategories();
+  await seedPermissions();
+  await seedSuperAdministrator();
+
+  console.log("Database seeding completed successfully.");
 }
 
 main()
   .catch((error) => {
-    console.error("Business category seeding failed:", error);
+    console.error("Database seeding failed:", error);
     process.exitCode = 1;
   })
   .finally(async () => {
