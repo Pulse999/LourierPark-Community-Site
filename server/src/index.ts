@@ -1,20 +1,17 @@
-
 import "dotenv/config";
 
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 
 import { prisma } from "./lib/prisma.js";
 import businessRoutes from "./routes/business.routes.js";
 import businessCategoryRoutes from "./routes/businessCategory.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
-
-// -----------------------------------------------------
-// MIDDLEWARE
-// -----------------------------------------------------
 
 app.use(helmet());
 
@@ -26,18 +23,14 @@ app.use(
 );
 
 app.use(express.json({ limit: "1mb" }));
+app.use(cookieParser());
 
-// -----------------------------------------------------
-// API ROUTES
-// -----------------------------------------------------
-
+// API routes
+app.use("/api/auth", authRoutes);
 app.use("/api/businesses", businessRoutes);
 app.use("/api/business-categories", businessCategoryRoutes);
 
-// -----------------------------------------------------
-// API HEALTH CHECK
-// -----------------------------------------------------
-
+// API health check
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
     status: "ok",
@@ -45,10 +38,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-// -----------------------------------------------------
-// DATABASE HEALTH CHECK
-// -----------------------------------------------------
-
+// Database health check
 app.get("/api/health/database", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
@@ -69,10 +59,7 @@ app.get("/api/health/database", async (_req, res) => {
   }
 });
 
-// -----------------------------------------------------
-// 404 HANDLER
-// -----------------------------------------------------
-
+// 404 handler
 app.use((_req, res) => {
   res.status(404).json({
     status: "error",
@@ -80,10 +67,7 @@ app.use((_req, res) => {
   });
 });
 
-// -----------------------------------------------------
-// CENTRAL ERROR HANDLER
-// -----------------------------------------------------
-
+// Central error handler
 app.use(
   (
     error: Error,
@@ -100,18 +84,12 @@ app.use(
   }
 );
 
-// -----------------------------------------------------
-// SERVER
-// -----------------------------------------------------
-
+// Server
 const server = app.listen(PORT, () => {
   console.log(`LourierPark API running on port ${PORT}`);
 });
 
-// -----------------------------------------------------
-// GRACEFUL SHUTDOWN
-// -----------------------------------------------------
-
+// Graceful shutdown
 const shutdown = async (signal: string) => {
   console.log(`${signal} received. Shutting down...`);
 
