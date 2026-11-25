@@ -45,14 +45,12 @@ export const getBusinessCategoryBySlug = async (
   next: NextFunction
 ) => {
   try {
-    const slug = Array.isArray(req.params.slug)
-      ? req.params.slug[0]
-      : req.params.slug;
+    const slug = req.params.slug;
 
-    if (!slug) {
+    if (typeof slug !== "string") {
       res.status(400).json({
         status: "error",
-        message: "A valid category slug is required.",
+        message: "Invalid category slug.",
       });
       return;
     }
@@ -100,21 +98,23 @@ export const getBusinessesByCategory = async (
   next: NextFunction
 ) => {
   try {
-    const slug = Array.isArray(req.params.slug)
-      ? req.params.slug[0]
-      : req.params.slug;
+    const slug = req.params.slug;
 
-    if (!slug) {
+    if (typeof slug !== "string") {
       res.status(400).json({
         status: "error",
-        message: "A valid category slug is required.",
+        message: "Invalid category slug.",
       });
       return;
     }
 
     const category = await prisma.businessCategory.findUnique({
       where: { slug },
-      select: { id: true, name: true, slug: true },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+      },
     });
 
     if (!category) {
@@ -149,6 +149,24 @@ export const getBusinessesByCategory = async (
         instagram: true,
         isFeatured: true,
         publishedAt: true,
+        images: {
+          orderBy: { sortOrder: "asc" },
+          select: {
+            id: true,
+            url: true,
+            altText: true,
+            sortOrder: true,
+          },
+        },
+        hours: {
+          orderBy: { day: "asc" },
+          select: {
+            day: true,
+            opensAt: true,
+            closesAt: true,
+            isClosed: true,
+          },
+        },
       },
     });
 
