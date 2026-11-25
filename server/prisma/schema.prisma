@@ -90,12 +90,46 @@ model AdminUser {
   reviewedSubmissions EventSubmission[] @relation("SubmissionReviewer")
   auditLogs           AuditLog[]
   uploadedMedia       MediaAsset[]
+  invitationsReceived AdminInvitation[] @relation("InvitedAdmin")
+invitationsSent     AdminInvitation[] @relation("AdminInviter")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([status])
   @@index([isSuperAdmin])
+}
+
+model AdminInvitation {
+  id String @id @default(cuid())
+
+  adminUserId String
+  adminUser   AdminUser @relation(
+    "InvitedAdmin",
+    fields: [adminUserId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  invitedById String
+  invitedBy   AdminUser @relation(
+    "AdminInviter",
+    fields: [invitedById],
+    references: [id],
+    onDelete: Restrict
+  )
+
+  tokenHash String @unique
+
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  revokedAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([adminUserId])
+  @@index([invitedById])
+  @@index([expiresAt])
 }
 
 model Role {
