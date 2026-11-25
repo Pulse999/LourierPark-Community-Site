@@ -2,6 +2,7 @@
 import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { AuthenticatedRequest } from "../middleware/auth.middleware.js";
 
 import { prisma } from "../lib/prisma.js";
 import {
@@ -134,5 +135,27 @@ export const logout = (_req: Request, res: Response) => {
   res.status(200).json({
     status: "ok",
     message: "Logout successful.",
+  });
+};
+
+export const getCurrentAdmin = (
+  req: Request,
+  res: Response
+) => {
+  const admin = (req as AuthenticatedRequest).admin;
+
+  if (!admin) {
+    res.status(401).json({
+      status: "error",
+      message: "Authentication required.",
+    });
+    return;
+  }
+
+  res.status(200).json({
+    status: "ok",
+    data: {
+      administrator: admin,
+    },
   });
 };
