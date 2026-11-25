@@ -1,5 +1,6 @@
 
 import { Router } from "express";
+
 import {
   getPublishedBusinesses,
   getPublishedBusinessBySlug,
@@ -7,7 +8,14 @@ import {
 
 const router = Router();
 
+// -----------------------------------------------------
+// PUBLIC BUSINESS DIRECTORY
+// -----------------------------------------------------
+
+// GET /api/businesses
 router.get("/", getPublishedBusinesses);
+
+// GET /api/businesses/:slug
 router.get("/:slug", getPublishedBusinessBySlug);
 
 export default router;
