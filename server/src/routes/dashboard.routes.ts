@@ -2,6 +2,7 @@
 import { Router } from "express";
 
 import { getDashboardStats } from "../controllers/dashboard.controller.js";
+import { getWebsiteAnalytics } from "../controllers/websiteAnalytics.controller.js";
 
 import {
   authenticateAdmin,
@@ -15,6 +16,13 @@ router.get(
   authenticateAdmin,
   requirePermission("dashboard.analytics.view"),
   getDashboardStats
+);
+
+router.get(
+  "/analytics",
+  authenticateAdmin,
+  requirePermission("dashboard.analytics.view"),
+  getWebsiteAnalytics
 );
 
 export default router;
