@@ -189,6 +189,12 @@ const permissions = [
     description: "Manage administrator accounts.",
   },
   {
+  key: "admin.invitations.create",
+  module: "admins",
+  action: "invite",
+  description: "Create invitations for new administrators.",
+},
+  {
     key: "roles.manage",
     module: "roles",
     action: "manage",
