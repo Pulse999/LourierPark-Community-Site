@@ -141,6 +141,12 @@ const permissions = [
     description: "View the administration dashboard.",
   },
   {
+    key: "dashboard.analytics.view",
+    module: "dashboard",
+    action: "analytics.view",
+    description: "View dashboard analytics and website statistics.",
+  },
+  {
     key: "businesses.view",
     module: "businesses",
     action: "view",
@@ -189,11 +195,11 @@ const permissions = [
     description: "Manage administrator accounts.",
   },
   {
-  key: "admin.invitations.create",
-  module: "admins",
-  action: "invite",
-  description: "Create invitations for new administrators.",
-},
+    key: "admin.invitations.create",
+    module: "admins",
+    action: "invite",
+    description: "Create invitations for new administrators.",
+  },
   {
     key: "roles.manage",
     module: "roles",

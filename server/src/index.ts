@@ -10,6 +10,7 @@ import { prisma } from "./lib/prisma.js";
 import businessRoutes from "./routes/business.routes.js";
 import businessCategoryRoutes from "./routes/businessCategory.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
@@ -44,6 +45,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/businesses", businessRoutes);
 app.use("/api/business-categories", businessCategoryRoutes);
+app.use("/api/admin/dashboard", dashboardRoutes);
 
 // API health check
 app.get("/api/health", (_req, res) => {
