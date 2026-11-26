@@ -1,3 +1,4 @@
+
 import "dotenv/config";
 
 import express from "express";
@@ -13,6 +14,20 @@ import authRoutes from "./routes/auth.routes.js";
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
+// Configure trusted reverse proxies for accurate client IP detection.
+// Set TRUST_PROXY_HOPS to the number of trusted proxies in production.
+const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? "0");
+
+if (
+  !Number.isInteger(trustProxyHops) ||
+  trustProxyHops < 0
+) {
+  throw new Error("TRUST_PROXY_HOPS must be a non-negative integer.");
+}
+
+app.set("trust proxy", trustProxyHops);
+
+// Security middleware
 app.use(helmet());
 
 app.use(
@@ -94,9 +109,14 @@ const shutdown = async (signal: string) => {
   console.log(`${signal} received. Shutting down...`);
 
   server.close(async () => {
-    await prisma.$disconnect();
-    console.log("Database connection closed.");
-    process.exit(0);
+    try {
+      await prisma.$disconnect();
+      console.log("Database connection closed.");
+      process.exit(0);
+    } catch (error) {
+      console.error("Error closing database connection:", error);
+      process.exit(1);
+    }
   });
 };
 

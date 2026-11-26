@@ -26,16 +26,9 @@ export const authenticateAdmin = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.cookies?.[AUTH_COOKIE_NAME];
+    const token = req.cookies?.[AUTH_COOKIE_NAME] ?? "";
 
-    if (!token) {
-      res.status(401).json({
-        status: "error",
-        message: "Authentication required.",
-      });
-      return;
-    }
-
+    // Verify the JWT signature and expiration.
     const decoded = jwt.verify(token, JWT_SECRET);
 
     if (
