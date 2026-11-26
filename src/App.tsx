@@ -11,6 +11,7 @@ import GalleryPage from "../pages/GalleryPage";
 import LocalBusinessesPage from "../pages/LocalBusinessesPage";
 import BusinessCategoryPage from "../pages/BusinessCategoryPage";
 import BusinessProfilePage from "../pages/BusinessProfilePage";
+import AdminLoginPage from "../pages/admin/AdminLoginPage";
 
 export default function App() {
   return (
@@ -69,6 +70,8 @@ export default function App() {
           }
         />
       </Route>
+      {/* Administration */}
+  <Route path="/admin/login" element={<AdminLoginPage />} />
     </Routes>
   );
 }
