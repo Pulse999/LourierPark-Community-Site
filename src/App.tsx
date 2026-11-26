@@ -12,6 +12,8 @@ import LocalBusinessesPage from "../pages/LocalBusinessesPage";
 import BusinessCategoryPage from "../pages/BusinessCategoryPage";
 import BusinessProfilePage from "../pages/BusinessProfilePage";
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
+import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 
 export default function App() {
   return (
@@ -71,7 +73,12 @@ export default function App() {
         />
       </Route>
       {/* Administration */}
-  <Route path="/admin/login" element={<AdminLoginPage />} />
+
+      <Route path="/admin/login" element={<AdminLoginPage />} />
+
+      <Route element={<ProtectedAdminRoute />}>
+        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+      </Route>
     </Routes>
   );
 }
