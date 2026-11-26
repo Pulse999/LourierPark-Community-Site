@@ -1,4 +1,4 @@
-
+// pages/admin/AdminDashboardPage.tsx
 import { useAuth } from "../../src/context/AuthContext";
 
 export default function AdminDashboardPage() {

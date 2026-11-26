@@ -1,4 +1,4 @@
-
+// admin route-protection component
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
