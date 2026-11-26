@@ -23,6 +23,11 @@ export * from './enums.js';
  */
 export type AdminUser = Prisma.AdminUserModel
 /**
+ * Model AdminInvitation
+ * 
+ */
+export type AdminInvitation = Prisma.AdminInvitationModel
+/**
  * Model Role
  * 
  */

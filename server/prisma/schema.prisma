@@ -104,20 +104,10 @@ model AdminInvitation {
   id String @id @default(cuid())
 
   adminUserId String
-  adminUser   AdminUser @relation(
-    "InvitedAdmin",
-    fields: [adminUserId],
-    references: [id],
-    onDelete: Cascade
-  )
+  adminUser   AdminUser @relation("InvitedAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
 
   invitedById String
-  invitedBy   AdminUser @relation(
-    "AdminInviter",
-    fields: [invitedById],
-    references: [id],
-    onDelete: Restrict
-  )
+  invitedBy   AdminUser @relation("AdminInviter", fields: [invitedById], references: [id], onDelete: Restrict)
 
   tokenHash String @unique
 

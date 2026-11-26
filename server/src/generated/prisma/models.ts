@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/AdminUser.js'
+export type * from './models/AdminInvitation.js'
 export type * from './models/Role.js'
 export type * from './models/Permission.js'
 export type * from './models/AdminRole.js'
