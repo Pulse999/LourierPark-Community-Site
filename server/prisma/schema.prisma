@@ -91,8 +91,6 @@ model AdminUser {
   auditLogs           AuditLog[]
   uploadedMedia       MediaAsset[]
   invitationsReceived AdminInvitation[] @relation("InvitedAdmin")
-invitationsSent     AdminInvitation[] @relation("AdminInviter")
-  invitationsReceived AdminInvitation[] @relation("InvitedAdmin")
   invitationsSent     AdminInvitation[] @relation("AdminInviter")
 
   createdAt DateTime @default(now())
@@ -447,14 +445,13 @@ model AuditLog {
   @@index([createdAt])
 }
 
-
 // -----------------------------------------------------
 // WEBSITE ANALYTICS
 // -----------------------------------------------------
 
 model WebsiteVisitor {
-  id              String   @id @default(cuid())
-  anonymousIdHash String   @unique
+  id              String @id @default(cuid())
+  anonymousIdHash String @unique
 
   firstSeenAt DateTime @default(now())
   lastSeenAt  DateTime @default(now())

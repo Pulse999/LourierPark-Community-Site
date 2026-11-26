@@ -67,7 +67,9 @@ export const ModelName = {
   BusinessImage: 'BusinessImage',
   BusinessHour: 'BusinessHour',
   MediaAsset: 'MediaAsset',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  WebsiteVisitor: 'WebsiteVisitor',
+  WebsitePageView: 'WebsitePageView'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -355,6 +357,27 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const WebsiteVisitorScalarFieldEnum = {
+  id: 'id',
+  anonymousIdHash: 'anonymousIdHash',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt'
+} as const
+
+export type WebsiteVisitorScalarFieldEnum = (typeof WebsiteVisitorScalarFieldEnum)[keyof typeof WebsiteVisitorScalarFieldEnum]
+
+
+export const WebsitePageViewScalarFieldEnum = {
+  id: 'id',
+  visitorId: 'visitorId',
+  path: 'path',
+  referrerHost: 'referrerHost',
+  createdAt: 'createdAt'
+} as const
+
+export type WebsitePageViewScalarFieldEnum = (typeof WebsitePageViewScalarFieldEnum)[keyof typeof WebsitePageViewScalarFieldEnum]
 
 
 export const SortOrder = {
