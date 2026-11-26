@@ -38,30 +38,31 @@ export async function recordPageView(
     const anonymousIdHash = hashAnonymousId(anonymousId);
     const now = new Date();
 
-    await prisma.$transaction(async (transaction) => {
-      const visitor = await transaction.websiteVisitor.upsert({
-        where: { anonymousIdHash },
-        update: {
-          lastSeenAt: now,
-        },
-        create: {
-          anonymousIdHash,
-          firstSeenAt: now,
-          lastSeenAt: now,
-        },
-        select: {
-          id: true,
-        },
-      });
+    // Find or create the anonymous visitor.
+    // Avoids interactive transactions with the Neon connection pooler.
+    const visitor = await prisma.websiteVisitor.upsert({
+      where: { anonymousIdHash },
+      update: {
+        lastSeenAt: now,
+      },
+      create: {
+        anonymousIdHash,
+        firstSeenAt: now,
+        lastSeenAt: now,
+      },
+      select: {
+        id: true,
+      },
+    });
 
-      await transaction.websitePageView.create({
-        data: {
-          visitorId: visitor.id,
-          path: safePath,
-          referrerHost,
-          createdAt: now,
-        },
-      });
+    // Record this individual page view.
+    await prisma.websitePageView.create({
+      data: {
+        visitorId: visitor.id,
+        path: safePath,
+        referrerHost,
+        createdAt: now,
+      },
     });
 
     res.status(202).json({
