@@ -1,11 +1,9 @@
 
 import {
-  Activity,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
-  FileText,
   Images,
   LayoutDashboard,
   LogOut,
