@@ -5925,3 +5925,77 @@ html.has-scroll-reveal [data-reveal].is-visible {
     font-size: 32px;
   }
 }
+
+
+/* Administrator authentication loading */
+.admin-auth-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--slate);
+}
+
+.admin-auth-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--sage);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: admin-spin 0.8s linear infinite;
+}
+
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.admin-dashboard {
+  min-height: 100vh;
+  padding: 64px 7%;
+  background: var(--warm);
+  color: var(--navy);
+}
+
+.admin-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid #dce3dd;
+}
+
+.admin-dashboard-eyebrow {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.admin-dashboard-header h1 {
+  margin: 12px 0;
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 48px);
+}
+
+.admin-dashboard-header button {
+  padding: 12px 22px;
+  border: 1px solid #dce3dd;
+  border-radius: 8px;
+  background: white;
+  color: var(--navy);
+  cursor: pointer;
+}
+
+.admin-dashboard-content {
+  padding-top: 40px;
+}
+
+.admin-dashboard-content h2 {
+  font-family: var(--serif);
+  font-size: 28px;
+}
