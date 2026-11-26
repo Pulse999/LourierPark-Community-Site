@@ -246,7 +246,7 @@ export const createAdminInvitation = async (
       return;
     }
 
-    if (role.slug === "super-admin" && !inviter.isSuperAdmin) {
+    if (role.slug === "super-administrator" && !inviter.isSuperAdmin) {
       res.status(403).json({
         status: "error",
         message: "Only a super administrator can assign this role.",
