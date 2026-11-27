@@ -1,5 +1,5 @@
 
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import { SiteLayout } from "./components/SiteLayout";
 import AnalyticsTracker from "./components/analytics/AnalyticsTracker";
@@ -16,8 +16,11 @@ import BusinessCategoryPage from "../pages/BusinessCategoryPage";
 import BusinessProfilePage from "../pages/BusinessProfilePage";
 
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
-import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import AdministratorsPage from "../pages/admin/AdministratorsPage";
+
+import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+import AdminLayout from "./components/admin/AdminLayout";
 
 export default function App() {
   return (
@@ -91,11 +94,24 @@ export default function App() {
         element={<AdminLoginPage />}
       />
 
+      {/* Protected administration area */}
       <Route element={<ProtectedAdminRoute />}>
-        <Route
-          path="/admin/dashboard"
-          element={<AdminDashboardPage />}
-        />
+        <Route element={<AdminLayout />}>
+          <Route
+            path="/admin"
+            element={<Navigate to="/admin/dashboard" replace />}
+          />
+
+          <Route
+            path="/admin/dashboard"
+            element={<AdminDashboardPage />}
+          />
+
+          <Route
+            path="/admin/administrators"
+            element={<AdministratorsPage />}
+          />
+        </Route>
       </Route>
     </Routes>
   );
