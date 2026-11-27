@@ -1,17 +1,22 @@
 
 import type { Request, Response, NextFunction } from "express";
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createHash, randomBytes } from "node:crypto";
 
 import type { AuthenticatedRequest } from "../middleware/auth.middleware.js";
+
 import { prisma } from "../lib/prisma.js";
+
 import {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTIONS,
   JWT_SECRET,
   JWT_EXPIRES_IN,
 } from "../utils/auth.js";
+
+import { sendAdminInvitationEmail } from "../utils/email.js";
 
 const ADMIN_INVITATION_EXPIRY_HOURS = 48;
 const BCRYPT_ROUNDS = 12;
@@ -135,7 +140,10 @@ export const login = async (
 // ADMIN LOGOUT
 // -----------------------------------------------------
 
-export const logout = (_req: Request, res: Response): void => {
+export const logout = (
+  _req: Request,
+  res: Response
+): void => {
   res.clearCookie(AUTH_COOKIE_NAME, {
     ...AUTH_COOKIE_OPTIONS,
     maxAge: undefined,
@@ -246,7 +254,10 @@ export const createAdminInvitation = async (
       return;
     }
 
-    if (role.slug === "super-administrator" && !inviter.isSuperAdmin) {
+    if (
+      role.slug === "super-administrator" &&
+      !inviter.isSuperAdmin
+    ) {
       res.status(403).json({
         status: "error",
         message: "Only a super administrator can assign this role.",
@@ -254,21 +265,24 @@ export const createAdminInvitation = async (
       return;
     }
 
+    // Generate a secure, single-use invitation token.
     const rawToken = randomBytes(32).toString("hex");
     const tokenHash = hashInvitationToken(rawToken);
 
     const expiresAt = new Date(
-      Date.now() + ADMIN_INVITATION_EXPIRY_HOURS * 60 * 60 * 1000
+      Date.now() +
+        ADMIN_INVITATION_EXPIRY_HOURS * 60 * 60 * 1000
     );
 
-    // This password is intentionally random and never disclosed.
-    // The invitee sets their own password when accepting the invitation.
+    // The invitee creates their own password when accepting.
     const unusablePassword = randomBytes(48).toString("hex");
+
     const passwordHash = await bcrypt.hash(
       unusablePassword,
       BCRYPT_ROUNDS
     );
 
+    // Create the invited administrator and invitation.
     const invitation = await prisma.$transaction(async (tx) => {
       const invitedAdmin = await tx.adminUser.create({
         data: {
@@ -308,9 +322,13 @@ export const createAdminInvitation = async (
         },
       });
 
-      return createdInvitation;
+      return {
+        ...createdInvitation,
+        adminUserId: invitedAdmin.id,
+      };
     });
 
+    // Construct the invitation URL.
     const clientUrl = (
       process.env.CLIENT_URL || "http://localhost:5173"
     ).replace(/\/+$/, "");
@@ -318,21 +336,86 @@ export const createAdminInvitation = async (
     const invitationUrl =
       `${clientUrl}/admin/accept-invitation?token=${rawToken}`;
 
-    res.status(201).json({
-      status: "ok",
-      message: "Administrator invitation created successfully.",
-      data: {
-        invitation: {
-          id: invitation.id,
-          email,
-          role: role.name,
-          expiresAt: invitation.expiresAt,
+    // Send the invitation email using Resend.
+    try {
+      const emailId = await sendAdminInvitationEmail({
+        recipientEmail: email,
+        recipientName: name,
+        roleName: role.name,
+        invitationUrl,
+        expiresAt: invitation.expiresAt,
+      });
+
+      await prisma.auditLog.create({
+        data: {
+          adminUserId: inviter.id,
+          action: "ADMIN_INVITATION_EMAIL_SENT",
+          resourceType: "AdminInvitation",
+          resourceId: invitation.id,
+          details: {
+            invitedEmail: email,
+            emailId,
+          },
+          ipAddress: req.ip,
+          userAgent: req.get("user-agent"),
         },
-        ...(process.env.NODE_ENV !== "production"
-          ? { invitationUrl }
-          : {}),
-      },
-    });
+      });
+
+      res.status(201).json({
+        status: "ok",
+        message:
+          "Administrator invitation created and email sent successfully.",
+        data: {
+          invitation: {
+            id: invitation.id,
+            email,
+            role: role.name,
+            expiresAt: invitation.expiresAt,
+          },
+        },
+      });
+    } catch (emailError) {
+      // Revoke the invitation if email delivery fails.
+      await prisma.$transaction(async (tx) => {
+        await tx.adminInvitation.updateMany({
+          where: {
+            id: invitation.id,
+            acceptedAt: null,
+            revokedAt: null,
+          },
+          data: {
+            revokedAt: new Date(),
+          },
+        });
+
+        await tx.adminUser.update({
+          where: { id: invitation.adminUserId },
+          data: {
+            status: "DEACTIVATED",
+          },
+        });
+
+        await tx.auditLog.create({
+          data: {
+            adminUserId: inviter.id,
+            action: "ADMIN_INVITATION_EMAIL_FAILED",
+            resourceType: "AdminInvitation",
+            resourceId: invitation.id,
+            details: {
+              invitedEmail: email,
+              reason:
+                emailError instanceof Error
+                  ? emailError.message
+                  : "Unknown email delivery error",
+            },
+            ipAddress: req.ip,
+            userAgent: req.get("user-agent"),
+          },
+        });
+      });
+
+      next(emailError);
+    }
   } catch (error) {
     next(error);
   }
