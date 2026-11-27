@@ -1,4 +1,3 @@
-
 import type { Request, Response, NextFunction } from "express";
 
 import bcrypt from "bcryptjs";
@@ -31,7 +30,7 @@ const hashInvitationToken = (token: string): string =>
 export const login = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const email =
@@ -77,10 +76,7 @@ export const login = async (
       return;
     }
 
-    const passwordMatches = await bcrypt.compare(
-      password,
-      admin.passwordHash
-    );
+    const passwordMatches = await bcrypt.compare(password, admin.passwordHash);
 
     if (!passwordMatches) {
       res.status(401).json({
@@ -90,11 +86,9 @@ export const login = async (
       return;
     }
 
-    const token = jwt.sign(
-      { sub: admin.id },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
+    const token = jwt.sign({ sub: admin.id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
 
     res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
@@ -112,8 +106,8 @@ export const login = async (
     const permissions = [
       ...new Set(
         admin.roles.flatMap(({ role }) =>
-          role.permissions.map(({ permission }) => permission.key)
-        )
+          role.permissions.map(({ permission }) => permission.key),
+        ),
       ),
     ];
 
@@ -140,10 +134,7 @@ export const login = async (
 // ADMIN LOGOUT
 // -----------------------------------------------------
 
-export const logout = (
-  _req: Request,
-  res: Response
-): void => {
+export const logout = (_req: Request, res: Response): void => {
   res.clearCookie(AUTH_COOKIE_NAME, {
     ...AUTH_COOKIE_OPTIONS,
     maxAge: undefined,
@@ -159,10 +150,7 @@ export const logout = (
 // CURRENT ADMINISTRATOR
 // -----------------------------------------------------
 
-export const getCurrentAdmin = (
-  req: Request,
-  res: Response
-): void => {
+export const getCurrentAdmin = (req: Request, res: Response): void => {
   const admin = (req as AuthenticatedRequest).admin;
 
   if (!admin) {
@@ -188,7 +176,7 @@ export const getCurrentAdmin = (
 export const createAdminInvitation = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const inviter = (req as AuthenticatedRequest).admin;
@@ -201,8 +189,7 @@ export const createAdminInvitation = async (
       return;
     }
 
-    const name =
-      typeof req.body.name === "string" ? req.body.name.trim() : "";
+    const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
 
     const email =
       typeof req.body.email === "string"
@@ -220,7 +207,20 @@ export const createAdminInvitation = async (
       return;
     }
 
-    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const emailParts = email.split("@");
+
+    const emailIsValid =
+      email.length <= 254 &&
+      emailParts.length === 2 &&
+      emailParts[0].length > 0 &&
+      emailParts[0].length <= 64 &&
+      emailParts[1].length > 0 &&
+      emailParts[1].length <= 253 &&
+      emailParts[1].includes(".") &&
+      !emailParts[1].startsWith(".") &&
+      !emailParts[1].endsWith(".") &&
+      !emailParts[1].includes("..") &&
+      !/\s/.test(email);
 
     if (!emailIsValid) {
       res.status(400).json({
@@ -254,10 +254,7 @@ export const createAdminInvitation = async (
       return;
     }
 
-    if (
-      role.slug === "super-administrator" &&
-      !inviter.isSuperAdmin
-    ) {
+    if (role.slug === "super-administrator" && !inviter.isSuperAdmin) {
       res.status(403).json({
         status: "error",
         message: "Only a super administrator can assign this role.",
@@ -270,17 +267,13 @@ export const createAdminInvitation = async (
     const tokenHash = hashInvitationToken(rawToken);
 
     const expiresAt = new Date(
-      Date.now() +
-        ADMIN_INVITATION_EXPIRY_HOURS * 60 * 60 * 1000
+      Date.now() + ADMIN_INVITATION_EXPIRY_HOURS * 60 * 60 * 1000,
     );
 
     // The invitee creates their own password when accepting.
     const unusablePassword = randomBytes(48).toString("hex");
 
-    const passwordHash = await bcrypt.hash(
-      unusablePassword,
-      BCRYPT_ROUNDS
-    );
+    const passwordHash = await bcrypt.hash(unusablePassword, BCRYPT_ROUNDS);
 
     // Create the invited administrator and invitation.
     const invitation = await prisma.$transaction(async (tx) => {
@@ -333,8 +326,7 @@ export const createAdminInvitation = async (
       process.env.CLIENT_URL || "http://localhost:5173"
     ).replace(/\/+$/, "");
 
-    const invitationUrl =
-      `${clientUrl}/admin/accept-invitation?token=${rawToken}`;
+    const invitationUrl = `${clientUrl}/admin/accept-invitation?token=${rawToken}`;
 
     // Send the invitation email using Resend.
     try {
@@ -428,7 +420,7 @@ export const createAdminInvitation = async (
 export const acceptAdminInvitation = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const token =
@@ -528,10 +520,7 @@ export const acceptAdminInvitation = async (
       message: "Invitation accepted. You can now log in.",
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === "INVITATION_ALREADY_USED"
-    ) {
+    if (error instanceof Error && error.message === "INVITATION_ALREADY_USED") {
       res.status(400).json({
         status: "error",
         message: "This invitation is invalid, expired or already used.",
