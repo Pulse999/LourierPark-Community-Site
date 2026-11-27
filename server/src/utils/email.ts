@@ -28,7 +28,7 @@ export async function sendAdminInvitationEmail({
   roleName,
   invitationUrl,
   expiresAt,
-}: AdminInvitationEmailOptions): Promise<string | null> {
+}: AdminInvitationEmailOptions): Promise<string> {
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
@@ -121,5 +121,9 @@ LourierPark - Our Neighbourhood, Our Home
     throw new Error(`Resend email failed: ${error.message}`);
   }
 
-  return data?.id ?? null;
+  if (!data?.id) {
+  throw new Error("Resend did not return an email ID.");
+}
+
+return data.id;
 }
