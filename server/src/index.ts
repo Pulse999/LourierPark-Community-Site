@@ -12,6 +12,7 @@ import businessCategoryRoutes from "./routes/businessCategory.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
+import administratorRoutes from "./routes/administrator.routes.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
@@ -48,6 +49,7 @@ app.use("/api/businesses", businessRoutes);
 app.use("/api/business-categories", businessCategoryRoutes);
 app.use("/api/admin/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/admin/administrators", administratorRoutes);
 
 // API health check
 app.get("/api/health", (_req, res) => {
