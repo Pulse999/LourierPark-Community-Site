@@ -18,7 +18,7 @@ import administratorRoutes from "./routes/administrator.routes.js";
 import {
   doubleCsrfProtection,
   generateCsrfToken,
-  invalidCsrfTokenError,
+  isInvalidCsrfTokenError,
 } from "./utils/csrf.js";
 
 const app = express();
@@ -130,7 +130,7 @@ app.use(
     res: express.Response,
     _next: express.NextFunction
   ) => {
-    if (error === invalidCsrfTokenError) {
+    if (isInvalidCsrfTokenError(error)) {
       res.status(403).json({
         status: "error",
         message: "Invalid or missing CSRF token. Please refresh and try again.",
