@@ -7,6 +7,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 
 import { prisma } from "./lib/prisma.js";
+
 import businessRoutes from "./routes/business.routes.js";
 import businessCategoryRoutes from "./routes/businessCategory.routes.js";
 import authRoutes from "./routes/auth.routes.js";
@@ -17,8 +18,7 @@ import administratorRoutes from "./routes/administrator.routes.js";
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
-// Configure trusted reverse proxies for accurate client IP detection.
-// Set TRUST_PROXY_HOPS to the number of trusted proxies in production.
+// Configure trusted reverse proxies.
 const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? "0");
 
 if (
@@ -30,7 +30,7 @@ if (
 
 app.set("trust proxy", trustProxyHops);
 
-// Security middleware
+// Security middleware.
 app.use(helmet());
 
 app.use(
@@ -43,7 +43,7 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 
-// API routes
+// API routes.
 app.use("/api/auth", authRoutes);
 app.use("/api/businesses", businessRoutes);
 app.use("/api/business-categories", businessCategoryRoutes);
@@ -51,7 +51,7 @@ app.use("/api/admin/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/admin/administrators", administratorRoutes);
 
-// API health check
+// API health check.
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
     status: "ok",
@@ -59,7 +59,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-// Database health check
+// Database health check.
 app.get("/api/health/database", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
@@ -80,7 +80,7 @@ app.get("/api/health/database", async (_req, res) => {
   }
 });
 
-// 404 handler
+// 404 handler.
 app.use((_req, res) => {
   res.status(404).json({
     status: "error",
@@ -88,7 +88,7 @@ app.use((_req, res) => {
   });
 });
 
-// Central error handler
+// Central error handler.
 app.use(
   (
     error: Error,
@@ -105,13 +105,13 @@ app.use(
   }
 );
 
-// Server
+// Start server.
 const server = app.listen(PORT, () => {
   console.log(`LourierPark API running on port ${PORT}`);
 });
 
-// Graceful shutdown
-const shutdown = async (signal: string) => {
+// Graceful shutdown.
+const shutdown = async (signal: string): Promise<void> => {
   console.log(`${signal} received. Shutting down...`);
 
   server.close(async () => {
