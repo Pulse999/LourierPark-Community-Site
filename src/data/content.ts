@@ -42,7 +42,9 @@ const localCommunityImages = [
   '/images/LP-Section-4-2.jpg',
   '/images/LP-Section-4.jpg',
   '/images/LP-Soccer-ground.jpg',
-
+  '/images/LP-blue-container.jpg',
+  '/images/LP-fieldroad.jpg',
+  '/images/LP-church-2.jpg',
   '/images/Photo-15-1024x662.jpg',
   '/images/Rooidam-2.jpg',
   '/images/Rooidam.jpg',

@@ -7,45 +7,85 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 
 import { prisma } from "./lib/prisma.js";
+
 import businessRoutes from "./routes/business.routes.js";
 import businessCategoryRoutes from "./routes/businessCategory.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
+import administratorRoutes from "./routes/administrator.routes.js";
+
+import {
+  doubleCsrfProtection,
+  generateCsrfToken,
+  isInvalidCsrfTokenError,
+} from "./utils/csrf.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
-// Configure trusted reverse proxies for accurate client IP detection.
-// Set TRUST_PROXY_HOPS to the number of trusted proxies in production.
 const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? "0");
 
-if (
-  !Number.isInteger(trustProxyHops) ||
-  trustProxyHops < 0
-) {
+if (!Number.isInteger(trustProxyHops) || trustProxyHops < 0) {
   throw new Error("TRUST_PROXY_HOPS must be a non-negative integer.");
 }
 
 app.set("trust proxy", trustProxyHops);
 
-// Security middleware
+// Security middleware.
 app.use(helmet());
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin:
+      process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "X-Requested-With",
+      "X-CSRF-Token",
+    ],
   })
 );
 
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 
-// API routes
+// CSRF token endpoint.
+// The frontend calls this before making state-changing requests.
+// Use ?refresh=1 after login or logout because the JWT cookie changes.
+app.get("/api/csrf-token", (req, res, next) => {
+  try {
+    const refresh = req.query.refresh === "1";
+
+    const csrfToken = generateCsrfToken(req, res, {
+      overwrite: refresh,
+    });
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        csrfToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Protect state-changing API requests.
+app.use(doubleCsrfProtection);
+
+// API routes.
 app.use("/api/auth", authRoutes);
 app.use("/api/businesses", businessRoutes);
 app.use("/api/business-categories", businessCategoryRoutes);
+app.use("/api/admin/dashboard", dashboardRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/admin/administrators", administratorRoutes);
 
-// API health check
+// API health check.
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
     status: "ok",
@@ -53,7 +93,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-// Database health check
+// Database health check.
 app.get("/api/health/database", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
@@ -74,7 +114,7 @@ app.get("/api/health/database", async (_req, res) => {
   }
 });
 
-// 404 handler
+// 404 handler.
 app.use((_req, res) => {
   res.status(404).json({
     status: "error",
@@ -82,7 +122,7 @@ app.use((_req, res) => {
   });
 });
 
-// Central error handler
+// Central error handler.
 app.use(
   (
     error: Error,
@@ -90,6 +130,14 @@ app.use(
     res: express.Response,
     _next: express.NextFunction
   ) => {
+    if (isInvalidCsrfTokenError(error)) {
+      res.status(403).json({
+        status: "error",
+        message: "Invalid or missing CSRF token. Please refresh and try again.",
+      });
+      return;
+    }
+
     console.error("API error:", error);
 
     res.status(500).json({
@@ -99,13 +147,13 @@ app.use(
   }
 );
 
-// Server
+// Start server.
 const server = app.listen(PORT, () => {
   console.log(`LourierPark API running on port ${PORT}`);
 });
 
-// Graceful shutdown
-const shutdown = async (signal: string) => {
+// Graceful shutdown.
+const shutdown = async (signal: string): Promise<void> => {
   console.log(`${signal} received. Shutting down...`);
 
   server.close(async () => {

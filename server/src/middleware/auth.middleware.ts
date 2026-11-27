@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 import {
   AUTH_COOKIE_NAME,
+  AUTH_COOKIE_OPTIONS,
   JWT_SECRET,
 } from "../utils/auth.js";
 
@@ -64,7 +65,10 @@ export const authenticateAdmin = async (
     });
 
     if (!admin || admin.status !== "ACTIVE") {
-      res.clearCookie(AUTH_COOKIE_NAME);
+      res.clearCookie(AUTH_COOKIE_NAME, {
+  ...AUTH_COOKIE_OPTIONS,
+  maxAge: undefined,
+});
 
       res.status(401).json({
         status: "error",
@@ -100,7 +104,10 @@ export const authenticateAdmin = async (
       error instanceof jwt.JsonWebTokenError ||
       error instanceof jwt.TokenExpiredError
     ) {
-      res.clearCookie(AUTH_COOKIE_NAME);
+      res.clearCookie(AUTH_COOKIE_NAME, {
+  ...AUTH_COOKIE_OPTIONS,
+  maxAge: undefined,
+});
 
       res.status(401).json({
         status: "error",

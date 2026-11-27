@@ -91,7 +91,7 @@ model AdminUser {
   auditLogs           AuditLog[]
   uploadedMedia       MediaAsset[]
   invitationsReceived AdminInvitation[] @relation("InvitedAdmin")
-invitationsSent     AdminInvitation[] @relation("AdminInviter")
+  invitationsSent     AdminInvitation[] @relation("AdminInviter")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -442,5 +442,38 @@ model AuditLog {
 
   @@index([adminUserId, createdAt])
   @@index([resourceType, resourceId])
+  @@index([createdAt])
+}
+
+// -----------------------------------------------------
+// WEBSITE ANALYTICS
+// -----------------------------------------------------
+
+model WebsiteVisitor {
+  id              String @id @default(cuid())
+  anonymousIdHash String @unique
+
+  firstSeenAt DateTime @default(now())
+  lastSeenAt  DateTime @default(now())
+
+  pageViews WebsitePageView[]
+
+  @@index([firstSeenAt])
+  @@index([lastSeenAt])
+}
+
+model WebsitePageView {
+  id String @id @default(cuid())
+
+  visitorId String
+  visitor   WebsiteVisitor @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+
+  path         String
+  referrerHost String?
+
+  createdAt DateTime @default(now())
+
+  @@index([visitorId, createdAt])
+  @@index([path, createdAt])
   @@index([createdAt])
 }

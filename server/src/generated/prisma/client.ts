@@ -126,3 +126,13 @@ export type MediaAsset = Prisma.MediaAssetModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model WebsiteVisitor
+ * 
+ */
+export type WebsiteVisitor = Prisma.WebsiteVisitorModel
+/**
+ * Model WebsitePageView
+ * 
+ */
+export type WebsitePageView = Prisma.WebsitePageViewModel

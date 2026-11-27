@@ -6,13 +6,19 @@ import {
   login,
   logout,
   getCurrentAdmin,
+  createAdminInvitation,
+  acceptAdminInvitation,
 } from "../controllers/auth.controller.js";
 
-import { authenticateAdmin } from "../middleware/auth.middleware.js";
+import {
+  authenticateAdmin,
+  requirePermission,
+} from "../middleware/auth.middleware.js";
+
+import { csrfProtection } from "../middleware/csrf.middleware.js";
 
 const router = Router();
 
-// Strict rate limit for administrator login attempts.
 const loginRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 5,
@@ -24,7 +30,6 @@ const loginRateLimiter = rateLimit({
   },
 });
 
-// General rate limit for authentication endpoints.
 const authRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
@@ -36,11 +41,63 @@ const authRateLimiter = rateLimit({
   },
 });
 
-// Administrator authentication routes.
+const invitationRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    status: "error",
+    message: "Too many invitations created. Please try again later.",
+  },
+});
+
+const invitationAcceptanceRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    status: "error",
+    message: "Too many invitation attempts. Please try again later.",
+  },
+});
+
+// Login does not yet have an authenticated cookie.
 router.post("/login", loginRateLimiter, login);
 
-router.post("/logout", authRateLimiter, logout);
+// Logout changes the authenticated session.
+router.post(
+  "/logout",
+  authRateLimiter,
+  authenticateAdmin,
+  csrfProtection,
+  logout
+);
 
-router.get("/me", authRateLimiter, authenticateAdmin, getCurrentAdmin);
+router.get(
+  "/me",
+  authRateLimiter,
+  authenticateAdmin,
+  getCurrentAdmin
+);
+
+// Create administrator invitation.
+router.post(
+  "/invitations",
+  invitationRateLimiter,
+  authenticateAdmin,
+  csrfProtection,
+  requirePermission("admin.invitations.create"),
+  createAdminInvitation
+);
+
+// Public invitation acceptance.
+// The invitation token provides verification.
+router.post(
+  "/accept-invitation",
+  invitationAcceptanceRateLimiter,
+  acceptAdminInvitation
+);
 
 export default router;
