@@ -18,13 +18,9 @@ import administratorRoutes from "./routes/administrator.routes.js";
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
-// Configure trusted reverse proxies.
 const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? "0");
 
-if (
-  !Number.isInteger(trustProxyHops) ||
-  trustProxyHops < 0
-) {
+if (!Number.isInteger(trustProxyHops) || trustProxyHops < 0) {
   throw new Error("TRUST_PROXY_HOPS must be a non-negative integer.");
 }
 
@@ -37,6 +33,8 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "X-Requested-With"],
   })
 );
 

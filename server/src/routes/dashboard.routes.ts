@@ -1,5 +1,6 @@
 
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 
 import { getDashboardStats } from "../controllers/dashboard.controller.js";
 import { getWebsiteAnalytics } from "../controllers/websiteAnalytics.controller.js";
@@ -11,18 +12,22 @@ import {
 
 const router = Router();
 
-router.get(
-  "/stats",
-  authenticateAdmin,
-  requirePermission("dashboard.analytics.view"),
-  getDashboardStats
-);
+const dashboardRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 120,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    status: "error",
+    message: "Too many dashboard requests. Please try again later.",
+  },
+});
 
-router.get(
-  "/analytics",
-  authenticateAdmin,
-  requirePermission("dashboard.analytics.view"),
-  getWebsiteAnalytics
-);
+router.use(dashboardRateLimiter);
+router.use(authenticateAdmin);
+router.use(requirePermission("dashboard.analytics.view"));
+
+router.get("/stats", getDashboardStats);
+router.get("/analytics", getWebsiteAnalytics);
 
 export default router;
