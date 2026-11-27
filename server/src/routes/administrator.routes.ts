@@ -1,5 +1,6 @@
 
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 
 import {
   getAdministrators,
@@ -14,22 +15,31 @@ import {
   requirePermission,
 } from "../middleware/auth.middleware.js";
 
+import { csrfProtection } from "../middleware/csrf.middleware.js";
+
 const router = Router();
 
-// All administrator management endpoints require authentication.
+const administratorRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 60,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    status: "error",
+    message: "Too many administrator management requests. Please try again later.",
+  },
+});
+
+router.use(administratorRateLimiter);
 router.use(authenticateAdmin);
+router.use(csrfProtection);
 router.use(requirePermission("admins.manage"));
 
-// Administrator accounts
 router.get("/", getAdministrators);
+router.get("/roles", getAdministratorRoles);
+router.get("/invitations", getAdministratorInvitations);
 
 router.patch("/:id/status", updateAdministratorStatus);
-
-// Available roles
-router.get("/roles", getAdministratorRoles);
-
-// Invitations
-router.get("/invitations", getAdministratorInvitations);
 
 router.patch(
   "/invitations/:id/revoke",
