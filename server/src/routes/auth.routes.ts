@@ -15,13 +15,10 @@ import {
   requirePermission,
 } from "../middleware/auth.middleware.js";
 
+import { csrfProtection } from "../middleware/csrf.middleware.js";
+
 const router = Router();
 
-// -----------------------------------------------------
-// RATE LIMITERS
-// -----------------------------------------------------
-
-// Strict rate limit for administrator login attempts.
 const loginRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 5,
@@ -33,7 +30,6 @@ const loginRateLimiter = rateLimit({
   },
 });
 
-// General rate limit for authentication endpoints.
 const authRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
@@ -45,7 +41,6 @@ const authRateLimiter = rateLimit({
   },
 });
 
-// Rate limit for invitation creation.
 const invitationRateLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   limit: 10,
@@ -57,7 +52,6 @@ const invitationRateLimiter = rateLimit({
   },
 });
 
-// Rate limit for accepting invitations.
 const invitationAcceptanceRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,
@@ -69,13 +63,17 @@ const invitationAcceptanceRateLimiter = rateLimit({
   },
 });
 
-// -----------------------------------------------------
-// AUTHENTICATION ROUTES
-// -----------------------------------------------------
-
+// Login does not yet have an authenticated cookie.
 router.post("/login", loginRateLimiter, login);
 
-router.post("/logout", authRateLimiter, logout);
+// Logout changes the authenticated session.
+router.post(
+  "/logout",
+  authRateLimiter,
+  authenticateAdmin,
+  csrfProtection,
+  logout
+);
 
 router.get(
   "/me",
@@ -84,22 +82,18 @@ router.get(
   getCurrentAdmin
 );
 
-// -----------------------------------------------------
-// ADMINISTRATOR INVITATION ROUTES
-// -----------------------------------------------------
-
-// Create an invitation.
-// Requires an authenticated administrator with the relevant permission.
+// Create administrator invitation.
 router.post(
   "/invitations",
   invitationRateLimiter,
   authenticateAdmin,
+  csrfProtection,
   requirePermission("admin.invitations.create"),
   createAdminInvitation
 );
 
-// Accept an invitation.
-// Public endpoint: the invitation token provides verification.
+// Public invitation acceptance.
+// The invitation token provides verification.
 router.post(
   "/accept-invitation",
   invitationAcceptanceRateLimiter,
