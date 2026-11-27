@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 
-import { apiRequest, ApiError } from "../../src/api/client";
+import { apiRequest } from "../../src/api/client";
 import { useAuth } from "../../src/context/AuthContext";
 
 type AdminStatus = "ACTIVE" | "INVITED" | "SUSPENDED" | "DEACTIVATED";

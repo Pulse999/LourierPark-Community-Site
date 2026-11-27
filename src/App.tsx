@@ -109,7 +109,7 @@ export default function App() {
 
           <Route
             path="/admin/administrators"
-            element={<AdministratorsPage />}
+            element={<AdministratorsPage/>}
           />
         </Route>
       </Route>
